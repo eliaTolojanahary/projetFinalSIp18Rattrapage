@@ -136,3 +136,88 @@ DEBUG - 2026-07-20 02:42:19 --> Session: Class initialized using 'CodeIgniter\Se
 DEBUG - 2026-07-20 02:42:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2026-07-20 02:42:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2026-07-20 03:08:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-07-20 06:53:00 --> CodeIgniter\Exceptions\CriticalError: The required PHP extension "sqlite3" is not loaded. Install and enable it to use "SQLite3" driver.
+[Method: CLI, Route: migrate]
+in SYSTEMPATH\Database\Database.php on line 186.
+ 1 SYSTEMPATH\Database\Database.php(59): CodeIgniter\Database\Database->checkDbExtension('SQLite3')
+ 2 SYSTEMPATH\Database\Config.php(82): CodeIgniter\Database\Database->load([...], 'default')
+ 3 SYSTEMPATH\Common.php(391): CodeIgniter\Database\Config::connect('default', true)
+ 4 SYSTEMPATH\Database\MigrationRunner.php(156): db_connect(null)
+ 5 SYSTEMPATH\Config\Services.php(421): CodeIgniter\Database\MigrationRunner->__construct(Object(Config\Migrations), null)
+ 6 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::migrations(Object(Config\Migrations), null, false)
+ 7 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('migrations', [...])
+ 8 SYSTEMPATH\Config\Services.php(416): CodeIgniter\Config\BaseService::getSharedInstance('migrations', null, null)
+ 9 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::migrations()
+10 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('migrations', [])
+11 SYSTEMPATH\Common.php(1078): CodeIgniter\Config\BaseService::get('migrations')
+12 SYSTEMPATH\Commands\Database\Migrate.php(73): service('migrations')
+13 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run([])
+14 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', [])
+15 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+16 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+17 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-07-20 06:54:38 --> near "'InnoDB'": syntax error
+in SYSTEMPATH\Database\SQLite3\Connection.php on line 163.
+ 1 SYSTEMPATH\Database\SQLite3\Connection.php(163): SQLite3->exec('CREATE TABLE `livres` (
+	`id` INTEGER PRIMARY KEY AUTOINCREMENT,
+	`titre` VARCHAR NOT NULL,
+	`auteur` VARCHAR NOT NULL,
+	`isbn` VARCHAR NOT NULL,
+	`annee_publication` YEAR NULL,
+	`categorie` VARCHAR NULL,
+	`resume` TEXT NULL,
+	`couverture_fichier` VARCHAR NULL,
+	`statut` TEXT CHECK(`statut` IN (\'disponible\',\'prete\')) NOT NULL DEFAULT \'disponible\',
+	`created_at` DATETIME NULL,
+	`updated_at` DATETIME NULL
+) ENGINE \'InnoDB\' CHARSET \'utf8mb4\' COLLATE \'utf8mb4_unicode_ci\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\SQLite3\Connection->execute('CREATE TABLE `livres` (
+	`id` INTEGER PRIMARY KEY AUTOINCREMENT,
+	`titre` VARCHAR NOT NULL,
+	`auteur` VARCHAR NOT NULL,
+	`isbn` VARCHAR NOT NULL,
+	`annee_publication` YEAR NULL,
+	`categorie` VARCHAR NULL,
+	`resume` TEXT NULL,
+	`couverture_fichier` VARCHAR NULL,
+	`statut` TEXT CHECK(`statut` IN (\'disponible\',\'prete\')) NOT NULL DEFAULT \'disponible\',
+	`created_at` DATETIME NULL,
+	`updated_at` DATETIME NULL
+) ENGINE \'InnoDB\' CHARSET \'utf8mb4\' COLLATE \'utf8mb4_unicode_ci\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `livres` (
+	`id` INTEGER PRIMARY KEY AUTOINCREMENT,
+	`titre` VARCHAR NOT NULL,
+	`auteur` VARCHAR NOT NULL,
+	`isbn` VARCHAR NOT NULL,
+	`annee_publication` YEAR NULL,
+	`categorie` VARCHAR NULL,
+	`resume` TEXT NULL,
+	`couverture_fichier` VARCHAR NULL,
+	`statut` TEXT CHECK(`statut` IN (\'disponible\',\'prete\')) NOT NULL DEFAULT \'disponible\',
+	`created_at` DATETIME NULL,
+	`updated_at` DATETIME NULL
+) ENGINE \'InnoDB\' CHARSET \'utf8mb4\' COLLATE \'utf8mb4_unicode_ci\'')
+ 4 SYSTEMPATH\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `livres` (
+	`id` INTEGER PRIMARY KEY AUTOINCREMENT,
+	`titre` VARCHAR NOT NULL,
+	`auteur` VARCHAR NOT NULL,
+	`isbn` VARCHAR NOT NULL,
+	`annee_publication` YEAR NULL,
+	`categorie` VARCHAR NULL,
+	`resume` TEXT NULL,
+	`couverture_fichier` VARCHAR NULL,
+	`statut` TEXT CHECK(`statut` IN (\'disponible\',\'prete\')) NOT NULL DEFAULT \'disponible\',
+	`created_at` DATETIME NULL,
+	`updated_at` DATETIME NULL
+) ENGINE \'InnoDB\' CHARSET \'utf8mb4\' COLLATE \'utf8mb4_unicode_ci\'')
+ 5 APPPATH\Database\Migrations\2026-04-21-000001_CreateLivresTable.php(65): CodeIgniter\Database\Forge->createTable('livres', true, [...])
+ 6 SYSTEMPATH\Database\MigrationRunner.php(1014): App\Database\Migrations\CreateLivresTable->up()
+ 7 SYSTEMPATH\Database\MigrationRunner.php(202): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+ 8 SYSTEMPATH\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(null)
+ 9 SYSTEMPATH\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+10 SYSTEMPATH\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+11 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run([])
+12 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', [])
+13 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+14 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+15 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))

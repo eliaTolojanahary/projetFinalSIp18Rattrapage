@@ -36,11 +36,7 @@ class CreateEmpruntsTable extends Migration
         $this->forge->addKey('id', true);
         $this->forge->addKey('livre_id');
         $this->forge->addForeignKey('livre_id', 'livres', 'id', 'CASCADE', 'RESTRICT');
-        $this->forge->createTable('emprunts', true, [
-            'ENGINE'  => 'InnoDB',
-            'CHARSET' => 'utf8mb4',
-            'COLLATE' => 'utf8mb4_unicode_ci',
-        ]);
+        $this->forge->createTable('emprunts', true);
     }
 
     public function down()
