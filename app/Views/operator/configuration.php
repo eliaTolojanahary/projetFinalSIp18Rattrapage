@@ -11,7 +11,7 @@
 <div class="card">
     <h2>Préfixes</h2>
 
-    <form method="POST" action="<?= site_url('configuration/prefix') ?>" style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;">
+    <form method="POST" action="<?= site_url('configuration/prefix') ?>" style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
         <?= csrf_field() ?>
         <div class="field" style="flex:1;min-width:140px;">
             <label for="prefixe">Préfixe</label>
@@ -23,6 +23,11 @@
             <input type="text" id="libelle" name="libelle" placeholder="Ex: Orange" required
                    value="<?= esc(old('libelle')) ?>">
         </div>
+        <div class="field" style="display:flex;align-items:center;gap:8px;padding-bottom:4px;">
+            <label for="est_operateur_principal" style="margin:0;white-space:nowrap;">Opérateur principal</label>
+            <input type="checkbox" id="est_operateur_principal" name="est_operateur_principal" value="1"
+                   <?= old('est_operateur_principal') ? 'checked' : '' ?>>
+        </div>
         <div class="field" style="display:flex;align-items:flex-end;">
             <button type="submit" class="btn">Ajouter</button>
         </div>
@@ -33,6 +38,7 @@
             <tr>
                 <th>Préfixe</th>
                 <th>Libellé</th>
+                <th>Principal</th>
                 <th>État</th>
                 <th>Actions</th>
             </tr>
@@ -44,13 +50,21 @@
                     <td><?= esc($p['prefixe']) ?></td>
                     <td><?= esc($p['libelle'] ?? '') ?></td>
                     <td>
+                        <span class="status <?= $p['est_operateur_principal'] ? 'status-disponible' : 'status-prete' ?>">
+                            <?= $p['est_operateur_principal'] ? 'Oui' : 'Non' ?>
+                        </span>
+                    </td>
+                    <td>
                         <span class="status <?= $p['actif'] ? 'status-disponible' : 'status-prete' ?>">
                             <?= $p['actif'] ? 'Actif' : 'Inactif' ?>
                         </span>
                     </td>
-                    <td style="display:flex;gap:6px;">
+                    <td style="display:flex;gap:6px;flex-wrap:wrap;">
                         <a class="btn btn-secondary" href="<?= site_url('configuration/prefix/' . $p['id'] . '/toggle') ?>">
                             <?= $p['actif'] ? 'Désactiver' : 'Activer' ?>
+                        </a>
+                        <a class="btn btn-secondary" href="<?= site_url('configuration/prefix/' . $p['id'] . '/toggle-principal') ?>">
+                            <?= $p['est_operateur_principal'] ? 'Retirer principal' : 'Définir principal' ?>
                         </a>
                         <a class="btn btn-danger" href="<?= site_url('configuration/prefix/' . $p['id'] . '/delete') ?>"
                            onclick="return confirm('Supprimer ce préfixe ?')">
@@ -60,7 +74,7 @@
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
-            <tr><td colspan="4" class="muted">Aucun préfixe configuré.</td></tr>
+            <tr><td colspan="5" class="muted">Aucun préfixe configuré.</td></tr>
         <?php endif; ?>
         </tbody>
     </table>

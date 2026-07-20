@@ -150,3 +150,10 @@ http://localhost:8080/
                         - nom_operateur
                         - montant_total
                         - nombre_transactions (optionnel)
+    - `Page 4: Configuration`
+        * Route: `/configuration`
+        * Préfixes:
+            - Création/Edit: + radio ou toggle  est_operateur_principal 
+            - Toggle actif/inactif
+            - Suppression
+            - API: `GET /api/prefixes` → préfixes actifs en JSON (pour datalist côté client)
