@@ -7,16 +7,8 @@ php spark serve
 ## Version 1
 http://localhost:8080/
 - **Coté client**: Elia (etu003230)
-
-
-    - `Page 1: Login`
-# Systeme operateur : simulation mobile money
-
-## Version 1
-- **Coté client**
     - `Page 1: Login`
         - Login automatique avec le numéro de téléphone
-    - `Page 2: Dépôt`
     - `Page 2: Dépôt`
         * Formulaire:
             - Montant (nombre) 
@@ -24,13 +16,11 @@ http://localhost:8080/
             - Date de dépôt (default now)
             - Frais de dépôt  => en fonction du montant et de transaction 
     - `Page 3: Retrait`  
-    - `Page 3: Retrait`  
         * Formulaire: 
             - Montant (nombre) 
             - Designation utilisateur/ compte retrait (v1 pas de connexion user) datalist / recherche par num  => prefix operateur valable a determiner 
             - Date de retrait (default now)
             - Frais de retrait => en fonction du montant et de transaction
-    - `Page 4: Transfert`  
     - `Page 4: Transfert`  
         * Formulaire: 
             - Montant (nombre) 
@@ -38,7 +28,6 @@ http://localhost:8080/
             - Designation utilisateur/ compte destinataire (v1 pas de connexion user) datalist / recherche par num  => prefix operateur valable a determiner 
             - Date de Transfert (default now)
             - Frais de Transfert => en fonction du montant et de transaction
-    - `Page 5: Detail client`
     - `Page 5: Detail client`
         * Fiche Client: 
             - Nom et Prenom 
@@ -116,29 +105,28 @@ http://localhost:8080/
             - `Solde = +dépôts - retraits - transferts sortants + transferts entrants`
             - Stocké dans `comptes.solde` (pas recalculé à la lecture)
 
-- **Coté opérateur**
-    - `Page 1: Signin`
-        - Numéro de téléphone
-        - Nom et Prenom 
-        - Info en plus ...
-    - `Page 2: Liste client`
-        * Table : 
-            - Num tel
-            - Client Assigne
-            - Num Compte (optionnel - default = num tel)
-            - Montant dans le compte principal => Situation compte = somme dépôt - somme retrait - somme transfert => dont origine client 
-            - Action detail => voir les information du client 
-    - `Page 3: Configuration`
-        * Form: Configuration des préfixes valable de l’opérateur (ex: 033 et 037)
-            - préfixes (string)
-            - libellé 
-        * Création de types d'opérations avec des barèmes de frais par tranche de montant
-            - select type transaction 
-            - montant min 
-            - montant max
-            - frais applique => datalist   
-    - `Page 4: Dashboard`
-        * Situation gain via les différents frais ( retrait et transfert)
-            - Montant somme frais qu'importe la transaction
-        * Situation des comptes clients 
-            - Bouton vers liste des clients 
+
+## Version 2
+- **Coté client**: Elia (etu003230)
+    - `Page 4: Transfert`  
+        + Bouton Option inclure frais de retrait lors de l’envoi 
+            * recuperer les frais de retrait correspondant au bareme du montant a transferer 
+            * frais de transfert = bareme   montant a transferer (apres inclusion)
+        + Envoi multiple vers plusieurs numéros ( divisé le montant pour chaque numéro)
+            * modif plusieur num destinataire au lieu de 1
+    - `Page 3: Retrait`  
+        + pas de frais de retrait pour les autres opérateurs si operateur different operateur du num pas de frais de retrais
+
+- **Coté opérateur** : Jemima (etu003370) 
+    - Table prefixe:
+        + boolean est operateur principal
+    - Configuration % en plus de commissions pour les transferts vers les autres opérateurs par rapport au montant envoye
+        + Table commission
+            - id 
+            - idprefixe  
+            - % 
+    - `Page 5: Dashboard`
+        - Sur la page “Situation gain via les différents frais” ,
+            - `TransactionOperatorModel::totalFrais()` => modifier pour avoir seulement les frais pour operateur principal
+            -  `TransactionOperatorModel::totalFraisAutre()` => modifier pour avoir seulement les frais pour operateur les autres
+        - Situation des montants à envoyer à chaque opérateur
