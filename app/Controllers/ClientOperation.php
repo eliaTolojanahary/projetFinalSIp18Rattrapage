@@ -8,8 +8,6 @@ use App\Models\ClientOperationModel;
 use App\Models\ClientBaremeModel;
 use App\Models\ClientTransactionModel;
 
-
-
 class ClientOperation extends BaseController
 {
     public function depotForm()
@@ -69,6 +67,7 @@ $compteId = session()->get('compte_id');
 
     return redirect()->to('/depot')->with('success', 'Dépôt de ' . $montant . ' Ar effectué.');
 }
+
 public function calculerFraisAjax()
 {
     $montant = (float) $this->request->getGet('montant');

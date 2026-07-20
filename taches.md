@@ -108,6 +108,11 @@ http://localhost:8080/
 
 ## Version 2
 - **Coté client**: Elia (etu003230)
+    -modif de la Configuration % en plus de commissions pour les transferts vers les autres opérateurs par rapport au montant envoye
+        + Table commission
+            - id 
+            - idprefixe  
+            - % 
     - `Page 4: Transfert`  
         + Bouton Option inclure frais de retrait lors de l’envoi 
             * recuperer les frais de retrait correspondant au bareme du montant a transferer 
@@ -120,11 +125,7 @@ http://localhost:8080/
 - **Coté opérateur** : Jemima (etu003370) 
     - Table prefixe:
         + boolean est operateur principal
-    - Configuration % en plus de commissions pour les transferts vers les autres opérateurs par rapport au montant envoye
-        + Table commission
-            - id 
-            - idprefixe  
-            - % 
+    
     - `Page 5: Dashboard`
         - Sur la page “Situation gain via les différents frais” ,
             - `TransactionOperatorModel::totalFrais()` => modifier pour avoir seulement les frais pour operateur principal
