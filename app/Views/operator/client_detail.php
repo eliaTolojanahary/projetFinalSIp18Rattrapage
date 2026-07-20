@@ -4,7 +4,7 @@
 
 <div class="card">
     <h1>Détail du client</h1>
-    <a class="btn btn-secondary" href="<?= site_url('clients') ?>">← Retour à la liste</a>
+    <a class="btn btn-secondary" href="<?= site_url('/operator/clients') ?>">← Retour à la liste</a>
 </div>
 
 <div class="card">

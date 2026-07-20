@@ -30,7 +30,7 @@
                         </span>
                     </td>
                     <td>
-                        <a class="btn" href="<?= site_url('clients/' . $client['id']) ?>">Detail</a>
+                        <a class="btn" href="<?= site_url('/operator/clients/' . $client['id']) ?>">Detail</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

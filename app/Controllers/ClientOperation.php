@@ -14,15 +14,24 @@ class ClientOperation extends BaseController
     public function depotForm()
     {
         $compteId = session()->get('compte_id');
-    $compteModel = new ClientModel();
-    $compte = $compteModel->find($compteId);
+        if (!$compteId) {
+            return redirect()->to('/');
+        }
+        $compteModel = new ClientModel();
+        $compte = $compteModel->find($compteId);
+        if (!$compte) {
+            return redirect()->to('/')->with('error', 'Compte introuvable.');
+        }
 
-    return view('clients/depot', ['compte' => $compte]);
+        return view('clients/depot', ['compte' => $compte]);
     }
 
 public function depotStore()
 {
-$compteId = session()->get('compte_id');
+    $compteId = session()->get('compte_id');
+    if (!$compteId) {
+        return redirect()->to('/');
+    }
     $montant  = (float) $this->request->getPost('montant');
 
     if ($montant <= 0) {
@@ -91,6 +100,9 @@ public function calculerFraisAjax()
     public function retraitForm()
 {
     $compteId = session()->get('compte_id');
+    if (!$compteId) {
+        return redirect()->to('/');
+    }
     $compteModel = new ClientModel();
     $compte = $compteModel->find($compteId);
 
@@ -100,6 +112,9 @@ public function calculerFraisAjax()
 public function retraitStore()
 {
     $compteId = session()->get('compte_id');
+    if (!$compteId) {
+        return redirect()->to('/');
+    }
     $montant  = (float) $this->request->getPost('montant');
 
     if ($montant <= 0) {
@@ -333,6 +348,9 @@ public function retraitStore()
     public function historique()
 {
     $compteId = session()->get('compte_id');
+    if (!$compteId) {
+        return redirect()->to('/');
+    }
 
     $transactionModel = new ClientTransactionModel();
     $historique = $transactionModel->historiquePourCompte($compteId);
