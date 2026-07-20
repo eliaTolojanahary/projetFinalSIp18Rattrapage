@@ -5,13 +5,14 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Livres::index');
 
-
-$routes->get('livres', 'Livres::index');
-$routes->get('livres/(:num)', 'Livres::show/$1');
-$routes->get('livres/ajouter', 'Livres::create');
-$routes->post('livres/ajouter', 'Livres::store');
-$routes->post('livres/(:num)/supprimer', 'Livres::delete/$1');
-$routes->post('livres/(:num)/preter', 'Livres::preter/$1');
-$routes->post('livres/(:num)/retour', 'Livres::retour/$1');
+$routes->get('/', 'Client::form');
+$routes->post('login', 'Client::login');
+$routes->get('depot', 'ClientOperation::depotForm');
+$routes->post('depot', 'ClientOperation::depotStore');
+$routes->get('frais', 'ClientOperation::calculerFraisAjax'); 
+ $routes->get('retrait', 'ClientOperation::retraitForm');
+    $routes->post('retrait', 'ClientOperation::retraitStore');
+$routes->get('transfert', 'ClientOperation::transfertForm');
+$routes->post('transfert', 'ClientOperation::transfertStore');
+$routes->get('historique', 'ClientOperation::historique');

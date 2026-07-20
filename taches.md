@@ -31,7 +31,7 @@
         * Bouton voir les historiques
         * Bouton voir le solde =>  Montant dans le compte principal => Situation compte = somme dépôt - somme retrait - somme transfert => dont origine client
     
-    - `Page 5: Table Historique des transaction`
+    - `Page 6:Table Historique des transaction`
         - Date
         - Type de transaction (dépôt, retrait, transfert)
         - Compte debite => le compte qui recoit l'argent (optionnel en fonction du type de transaction) 

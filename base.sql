@@ -1,5 +1,4 @@
-CREATE DATABASE mobile_money;
-USE mobile_money;
+
 CREATE TABLE prefixes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     prefixe VARCHAR(3) NOT NULL UNIQUE,     -- ex: '033', '037'
@@ -45,6 +44,9 @@ VALUES (2, 5001, 20000, 300);
 
 INSERT INTO baremes_frais (type_operation_id, montant_min, montant_max, frais)
 VALUES (2, 20001, 50000, 500);
+
+INSERT INTO baremes_frais (type_operation_id, montant_min, montant_max, frais)
+VALUES (3, 200, 5000, 500);
 
 
 -- ============================

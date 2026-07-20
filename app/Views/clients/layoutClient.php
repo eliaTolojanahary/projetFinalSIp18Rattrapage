@@ -1,0 +1,7 @@
+<nav style="margin-top:24px; text-align:center; font-size:14px;">
+    <a href="<?= base_url('depot') ?>">Dépôt</a> |
+    <a href="<?= base_url('retrait') ?>">Retrait</a> |
+    <a href="<?= base_url('transfert') ?>">Transfert</a> |
+    <a href="<?= base_url('historique') ?>">Historique</a> |
+    <a href="<?= base_url('dashboard') ?>">Détail compte</a>
+</nav>
