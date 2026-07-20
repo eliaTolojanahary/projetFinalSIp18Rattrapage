@@ -36,6 +36,17 @@ class ConfigurationOperatorModel extends Model
             ->update(['actif' => $row['actif'] ? 0 : 1]);
     }
 
+    public function togglePrincipal(int $id): bool
+    {
+        $row = $this->db->table('prefixes')->where('id', $id)->get()->getRowArray();
+        if (! $row) {
+            return false;
+        }
+        return $this->db->table('prefixes')
+            ->where('id', $id)
+            ->update(['est_operateur_principal' => $row['est_operateur_principal'] ? 0 : 1]);
+    }
+
     // --- Types d'opérations ---
     public function getTypesOperations(): array
     {

@@ -26,10 +26,40 @@ class TransactionOperatorModel extends Model
         return (float) $this->builder()
             ->select('COALESCE(SUM(bf.frais), 0) AS total')
             ->join('baremes_frais bf', 'transactions.baremes_frais_id = bf.id')
+            ->join('comptes c', 'transactions.compte_id = c.id')
+            ->join('prefixes p', 'SUBSTR(c.numero_telephone, 1, 3) = p.prefixe')
+            ->where('p.est_operateur_principal', 1)
             ->whereIn('transactions.type_operation_id', [2, 3])
             ->get()
             ->getRow()
             ->total ?? 0.0;
+    }
+
+    public function totalFraisAutre(): float
+    {
+        return (float) $this->builder()
+            ->select('COALESCE(SUM(bf.frais), 0) AS total')
+            ->join('baremes_frais bf', 'transactions.baremes_frais_id = bf.id')
+            ->join('comptes c', 'transactions.compte_id = c.id')
+            ->join('prefixes p', 'SUBSTR(c.numero_telephone, 1, 3) = p.prefixe')
+            ->where('p.est_operateur_principal', 0)
+            ->whereIn('transactions.type_operation_id', [2, 3])
+            ->get()
+            ->getRow()
+            ->total ?? 0.0;
+    }
+
+    public function montantsParOperateur(): array
+    {
+        return $this->builder()
+            ->select('p.id AS id_operateur, p.libelle AS nom_operateur, p.prefixe, COALESCE(SUM(bf.frais), 0) AS montant_total, COUNT(transactions.id) AS nombre_transactions')
+            ->join('baremes_frais bf', 'transactions.baremes_frais_id = bf.id')
+            ->join('comptes c', 'transactions.compte_id = c.id')
+            ->join('prefixes p', 'SUBSTR(c.numero_telephone, 1, 3) = p.prefixe')
+            ->whereIn('transactions.type_operation_id', [2, 3])
+            ->groupBy('p.id, p.libelle, p.prefixe')
+            ->get()
+            ->getResultArray();
     }
 
     /**

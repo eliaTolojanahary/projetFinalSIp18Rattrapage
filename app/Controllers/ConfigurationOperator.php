@@ -25,14 +25,16 @@ class ConfigurationOperator extends BaseController
         $model = new ConfigurationOperatorModel();
         $prefixe = trim($this->request->getPost('prefixe'));
         $libelle = trim($this->request->getPost('libelle'));
+        $estPrincipal = $this->request->getPost('est_operateur_principal') ? 1 : 0;
 
         if ($prefixe === '') {
             return redirect()->back()->withInput()->with('error', 'Préfixe et libellé requis.');
         }
 
         $model->insertPrefix([
-            'prefixe' => $prefixe,
-            'libelle' => $libelle,
+            'prefixe'                  => $prefixe,
+            'libelle'                  => $libelle,
+            'est_operateur_principal'  => $estPrincipal,
         ]);
 
         return redirect()->to('configuration')->with('success', 'Préfixe ajouté.');
@@ -52,6 +54,14 @@ class ConfigurationOperator extends BaseController
         $model->togglePrefix($id);
 
         return redirect()->to('configuration')->with('success', 'Statut du préfixe mis à jour.');
+    }
+
+    public function togglePrincipal(int $id)
+    {
+        $model = new ConfigurationOperatorModel();
+        $model->togglePrincipal($id);
+
+        return redirect()->to('configuration')->with('success', 'Statut principal mis à jour.');
     }
 
     // --- Barèmes ---
