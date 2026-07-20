@@ -16,3 +16,4 @@ $routes->get('frais', 'ClientOperation::calculerFraisAjax');
 $routes->get('transfert', 'ClientOperation::transfertForm');
 $routes->post('transfert', 'ClientOperation::transfertStore');
 $routes->get('historique', 'ClientOperation::historique');
+$routes->get('logout', 'Client::logout');

@@ -43,8 +43,8 @@ class Client extends BaseController
     }
 
     public function logout()
-    {
-        session()->destroy();
-        return redirect()->to('/');
-    }
+{
+    session()->destroy();
+    return redirect()->to('/');
+}
 }
