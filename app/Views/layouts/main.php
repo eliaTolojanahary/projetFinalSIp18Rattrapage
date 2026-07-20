@@ -145,9 +145,9 @@
 <body>
     <nav class="nav">
         <div class="brand">Mobile Money</div>
-        <a href="<?= site_url('/') ?>">Dashboard</a>
-        <a href="<?= site_url('/clients') ?>">Clients</a>
-        <a href="<?= site_url('/configuration') ?>">Configuration</a>
+        <a href="<?= site_url('/operator/dahsboard') ?>">Dashboard</a>
+        <a href="<?= site_url('/operator/clients') ?>">Clients</a>
+        <a href="<?= site_url('/operator/configuration') ?>">Configuration</a>
     </nav>
 
     <main class="container">

@@ -11,7 +11,7 @@
 <div class="card">
     <h2>Préfixes</h2>
 
-    <form method="POST" action="<?= site_url('configuration/prefix') ?>" style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+    <form method="POST" action="<?= site_url('/operator/configuration/prefix') ?>" style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
         <?= csrf_field() ?>
         <div class="field" style="flex:1;min-width:140px;">
             <label for="prefixe">Préfixe</label>
@@ -60,13 +60,13 @@
                         </span>
                     </td>
                     <td style="display:flex;gap:6px;flex-wrap:wrap;">
-                        <a class="btn btn-secondary" href="<?= site_url('configuration/prefix/' . $p['id'] . '/toggle') ?>">
+                        <a class="btn btn-secondary" href="<?= site_url('/operator/configuration/prefix/' . $p['id'] . '/toggle') ?>">
                             <?= $p['actif'] ? 'Désactiver' : 'Activer' ?>
                         </a>
-                        <a class="btn btn-secondary" href="<?= site_url('configuration/prefix/' . $p['id'] . '/toggle-principal') ?>">
+                        <a class="btn btn-secondary" href="<?= site_url('/operator/configuration/prefix/' . $p['id'] . '/toggle-principal') ?>">
                             <?= $p['est_operateur_principal'] ? 'Retirer principal' : 'Définir principal' ?>
                         </a>
-                        <a class="btn btn-danger" href="<?= site_url('configuration/prefix/' . $p['id'] . '/delete') ?>"
+                        <a class="btn btn-danger" href="<?= site_url('/operator/configuration/prefix/' . $p['id'] . '/delete') ?>"
                            onclick="return confirm('Supprimer ce préfixe ?')">
                             Supprimer
                         </a>
@@ -84,7 +84,7 @@
 <div class="card">
     <h2>Barèmes de frais</h2>
 
-    <form method="POST" action="<?= site_url('configuration/bareme') ?>" style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+    <form method="POST" action="<?= site_url('/operator/configuration/bareme') ?>" style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
         <?= csrf_field() ?>
         <div class="field" style="flex:2;min-width:180px;">
             <label for="type_operation_id">Type d'opération</label>
@@ -137,7 +137,7 @@
                     <td><?= esc(number_format($b['montant_max'], 2)) ?> $</td>
                     <td><?= esc(number_format($b['frais'], 2)) ?> $</td>
                     <td>
-                        <a class="btn btn-danger" href="<?= site_url('configuration/bareme/' . $b['id'] . '/delete') ?>"
+                        <a class="btn btn-danger" href="<?= site_url('/operator/configuration/bareme/' . $b['id'] . '/delete') ?>"
                            onclick="return confirm('Supprimer ce barème ?')">
                             Supprimer
                         </a>

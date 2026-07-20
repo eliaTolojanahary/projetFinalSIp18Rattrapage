@@ -65,7 +65,7 @@
 <div class="card">
     <h2>Comptes clients</h2>
     <p class="muted">Gérer les comptes clients et consulter leur situation.</p>
-    <a class="btn" href="<?= site_url('clients') ?>">Voir la liste des clients</a>
+    <a class="btn" href="<?= site_url('/operator/clients') ?>">Voir la liste des clients</a>
 </div>
 
 <?= $this->endSection() ?>
