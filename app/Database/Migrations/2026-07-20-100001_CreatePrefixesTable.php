@@ -19,6 +19,11 @@ class CreatePrefixesTable extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => 3,
             ],
+            'libelle' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 50,
+                'null'       => true,
+            ],
             'actif' => [
                 'type'    => 'INT',
                 'constraint' => 1,
@@ -29,11 +34,6 @@ class CreatePrefixesTable extends Migration
         $this->forge->addKey('id', true);
         $this->forge->addUniqueKey('prefixe');
         $this->forge->createTable('prefixes', true);
-
-        $this->db->table('prefixes')->insertBatch([
-            ['prefixe' => '033', 'actif' => 1],
-            ['prefixe' => '037', 'actif' => 1],
-        ]);
     }
 
     public function down()

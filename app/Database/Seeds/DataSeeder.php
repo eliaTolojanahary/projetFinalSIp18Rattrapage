@@ -8,120 +8,115 @@ class DataSeeder extends Seeder
 {
     public function run()
     {
-        $this->db->table('comptes')->insertBatch([
-            [
-                'numero_telephone' => '0331000001',
-                'nom'              => 'Rakoto',
-                'prenom'           => 'Jean',
-                'solde'            => 150000.00,
-            ],
-            [
-                'numero_telephone' => '0331000002',
-                'nom'              => 'Rabe',
-                'prenom'           => 'Soa',
-                'solde'            => 85000.00,
-            ],
-            [
-                'numero_telephone' => '0372000001',
-                'nom'              => 'Randria',
-                'prenom'           => 'Miary',
-                'solde'            => 250000.00,
-            ],
-            [
-                'numero_telephone' => '0372000002',
-                'nom'              => 'Rajaonah',
-                'prenom'           => 'Faly',
-                'solde'            => 45000.00,
-            ],
-            [
-                'numero_telephone' => '0331000003',
-                'nom'              => 'Andriana',
-                'prenom'           => 'Tiana',
-                'solde'            => 52000.00,
-            ],
+        // Vider les tables dans l'ordre (FK)
+        $this->db->table('transactions')->truncate();
+        $this->db->table('baremes_frais')->truncate();
+        $this->db->table('comptes')->truncate();
+        $this->db->table('types_operations')->truncate();
+        $this->db->table('prefixes')->truncate();
+
+        // Reset SQLite autoincrement sequences
+        if ($this->db->DBDriver === 'SQLite3') {
+            $this->db->query("DELETE FROM sqlite_sequence");
+        }
+
+        // --- Prefixes ---
+        $this->db->table('prefixes')->insertBatch([
+            ['prefixe' => '033', 'libelle' => 'Orange', 'actif' => 1],
+            ['prefixe' => '037', 'libelle' => 'Airtel', 'actif' => 1],
         ]);
 
+        // --- Types d'opérations ---
+        $this->db->table('types_operations')->insertBatch([
+            ['code' => 'depot',     'libelle' => 'Dépôt'],
+            ['code' => 'retrait',   'libelle' => 'Retrait'],
+            ['code' => 'transfert', 'libelle' => 'Transfert'],
+        ]);
+
+        // --- Barèmes de frais ---
+        // type_operation_id: 1=depot, 2=retrait, 3=transfert
+        $this->db->table('baremes_frais')->insertBatch([
+            // Dépôt
+            ['type_operation_id' => 1, 'montant_min' => 100,    'montant_max' => 10000,  'frais' => 50],
+            ['type_operation_id' => 1, 'montant_min' => 10001,  'montant_max' => 50000,  'frais' => 150],
+            ['type_operation_id' => 1, 'montant_min' => 50001,  'montant_max' => 200000, 'frais' => 400],
+            // Retrait
+            ['type_operation_id' => 2, 'montant_min' => 100,    'montant_max' => 5000,   'frais' => 100],
+            ['type_operation_id' => 2, 'montant_min' => 5001,   'montant_max' => 20000,  'frais' => 300],
+            ['type_operation_id' => 2, 'montant_min' => 20001,  'montant_max' => 50000,  'frais' => 500],
+            // Transfert
+            ['type_operation_id' => 3, 'montant_min' => 100,    'montant_max' => 5000,   'frais' => 150],
+            ['type_operation_id' => 3, 'montant_min' => 5001,   'montant_max' => 20000,  'frais' => 400],
+            ['type_operation_id' => 3, 'montant_min' => 20001,  'montant_max' => 100000, 'frais' => 750],
+        ]);
+
+        // --- Comptes clients ---
+        $this->db->table('comptes')->insertBatch([
+            ['numero_telephone' => '033123456', 'nom' => 'Rakoto', 'prenom' => 'Jean',   'solde' => 15000],
+            ['numero_telephone' => '037456789', 'nom' => 'Rasoa',  'prenom' => 'Marie',  'solde' => 8500],
+            ['numero_telephone' => '033987654', 'nom' => 'Andry',  'prenom' => 'Paul',   'solde' => 42000],
+            ['numero_telephone' => '037111222', 'nom' => 'Hery',   'prenom' => 'Claire', 'solde' => 27500],
+            ['numero_telephone' => '033333444', 'nom' => 'Rabe',   'prenom' => 'Daniel', 'solde' => 3000],
+        ]);
+
+        // --- Transactions ---
+        // baremes_frais_id: 1=depot(100-10000), 2=depot(10001-50000), 3=depot(50001-200000)
+        //                   4=retrait(100-5000), 5=retrait(5001-20000), 6=retrait(20001-50000)
+        //                   7=transfert(100-5000), 8=transfert(5001-20000), 9=transfert(20001-100000)
         $this->db->table('transactions')->insertBatch([
             [
-                'compte_id'            => 1,
-                'type_operation_id'    => 1,
-                'montant'              => 200000.00,
-                'baremes_frais_id'     => 1,
-                'compte_destination_id'=> null,
-                'solde_apres'          => 200000.00,
-                'date_operation'       => '2026-06-01 10:00:00',
+                'compte_id'             => 1,
+                'type_operation_id'     => 1,
+                'montant'               => 5000,
+                'baremes_frais_id'      => 1,
+                'compte_destination_id' => null,
+                'solde_apres'           => 5000,
+                'date_operation'        => '2026-06-01 10:00:00',
             ],
             [
-                'compte_id'            => 1,
-                'type_operation_id'    => 2,
-                'montant'              => 50000.00,
-                'baremes_frais_id'     => 3,
-                'compte_destination_id'=> null,
-                'solde_apres'          => 150000.00,
-                'date_operation'       => '2026-06-15 14:30:00',
+                'compte_id'             => 2,
+                'type_operation_id'     => 2,
+                'montant'               => 3000,
+                'baremes_frais_id'      => 4,
+                'compte_destination_id' => null,
+                'solde_apres'           => 2900,
+                'date_operation'        => '2026-06-10 09:00:00',
             ],
             [
-                'compte_id'            => 2,
-                'type_operation_id'    => 1,
-                'montant'              => 100000.00,
-                'baremes_frais_id'     => 1,
-                'compte_destination_id'=> null,
-                'solde_apres'          => 100000.00,
-                'date_operation'       => '2026-06-10 09:00:00',
+                'compte_id'             => 3,
+                'type_operation_id'     => 3,
+                'montant'               => 10000,
+                'baremes_frais_id'      => 8,
+                'compte_destination_id' => 4,
+                'solde_apres'           => 9850,
+                'date_operation'        => '2026-06-15 14:30:00',
             ],
             [
-                'compte_id'            => 2,
-                'type_operation_id'    => 2,
-                'montant'              => 15000.00,
-                'baremes_frais_id'     => 1,
-                'compte_destination_id'=> null,
-                'solde_apres'          => 85000.00,
-                'date_operation'       => '2026-06-20 11:00:00',
+                'compte_id'             => 4,
+                'type_operation_id'     => 1,
+                'montant'               => 20000,
+                'baremes_frais_id'      => 2,
+                'compte_destination_id' => null,
+                'solde_apres'           => 20000,
+                'date_operation'        => '2026-06-20 11:00:00',
             ],
             [
-                'compte_id'            => 3,
-                'type_operation_id'    => 1,
-                'montant'              => 300000.00,
-                'baremes_frais_id'     => 1,
-                'compte_destination_id'=> null,
-                'solde_apres'          => 300000.00,
-                'date_operation'       => '2026-06-05 08:00:00',
+                'compte_id'             => 5,
+                'type_operation_id'     => 2,
+                'montant'               => 2000,
+                'baremes_frais_id'      => 4,
+                'compte_destination_id' => null,
+                'solde_apres'           => 1900,
+                'date_operation'        => '2026-06-25 08:00:00',
             ],
             [
-                'compte_id'            => 3,
-                'type_operation_id'    => 3,
-                'montant'              => 50000.00,
-                'baremes_frais_id'     => 3,
-                'compte_destination_id'=> 4,
-                'solde_apres'          => 250000.00,
-                'date_operation'       => '2026-06-25 16:00:00',
-            ],
-            [
-                'compte_id'            => 4,
-                'type_operation_id'    => 3,
-                'montant'              => 50000.00,
-                'baremes_frais_id'     => 1,
-                'compte_destination_id'=> null,
-                'solde_apres'          => 50000.00,
-                'date_operation'       => '2026-06-25 16:00:00',
-            ],
-            [
-                'compte_id'            => 5,
-                'type_operation_id'    => 1,
-                'montant'              => 100000.00,
-                'baremes_frais_id'     => 1,
-                'compte_destination_id'=> null,
-                'solde_apres'          => 100000.00,
-                'date_operation'       => '2026-06-28 12:00:00',
-            ],
-            [
-                'compte_id'            => 5,
-                'type_operation_id'    => 2,
-                'montant'              => 48000.00,
-                'baremes_frais_id'     => 2,
-                'compte_destination_id'=> null,
-                'solde_apres'          => 52000.00,
-                'date_operation'       => '2026-07-01 09:00:00',
+                'compte_id'             => 1,
+                'type_operation_id'     => 3,
+                'montant'               => 3000,
+                'baremes_frais_id'      => 7,
+                'compte_destination_id' => 3,
+                'solde_apres'           => 2850,
+                'date_operation'        => '2026-06-28 16:00:00',
             ],
         ]);
     }

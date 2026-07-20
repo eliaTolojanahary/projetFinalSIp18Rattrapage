@@ -28,12 +28,6 @@ class CreateTypesOperationsTable extends Migration
         $this->forge->addKey('id', true);
         $this->forge->addUniqueKey('code');
         $this->forge->createTable('types_operations', true);
-
-        $this->db->table('types_operations')->insertBatch([
-            ['code' => 'depot',    'libelle' => 'Dépôt'],
-            ['code' => 'retrait',  'libelle' => 'Retrait'],
-            ['code' => 'transfert','libelle' => 'Transfert'],
-        ]);
     }
 
     public function down()

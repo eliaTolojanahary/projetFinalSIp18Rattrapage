@@ -48,12 +48,13 @@
             - Num tel
             - Client Assigne
             - Num Compte (optionnel - default = num tel)
-            - Montant dans le compte principal => Situation compte = somme dépôt - somme retrait - somme transfert => dont origine client 
+            - Montant dans le compte principal => Solde = Situation compte = somme dépôt - somme retrait - somme transfert => dont origine client 
             - Action detail => voir les information du client /clients/:idCompte
         * Fonction:
             - getSituationCompte() => liste avec tout les comptes clients 
             - getSituationCompte(idCompte) => detail pour un compte client specifique => info accessible a l'admin
     - `Page 3: Configuration`
+        * Route : /operator/config
         * Form: Configuration des préfixes valable de l’opérateur (ex: 033 et 037)
             - préfixes (string)
             - libellé 
@@ -61,7 +62,7 @@
             - select type transaction 
             - montant min 
             - montant max
-            - frais applique => datalist   
+            - frais applique => datalist si frais existant    
     - `Page 4: Dashboard`
         * Situation gain via les différents frais ( retrait et transfert)
             - Montant somme frais qu'importe la transaction => depuist TransactionOpratorModel.php/totalFrais()

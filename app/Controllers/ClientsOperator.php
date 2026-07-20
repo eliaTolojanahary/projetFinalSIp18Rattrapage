@@ -20,7 +20,7 @@ class ClientsOperator extends BaseController
     public function show(int $id)
     {
         $compteModel = new CompteOperatorModel();
-        $client = $compteModel->getSituationCompteParId($id);
+        $client = $compteModel->getSituationCompteParIdWithTransactions($id);
 
         if ($client === null) {
             throw PageNotFoundException::forPageNotFound('Client introuvable.');

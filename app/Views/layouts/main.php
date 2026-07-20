@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= esc($title ?? 'Gestion de bibliotheque') ?></title>
+    <title><?= esc($title ?? 'Mobile Money') ?></title>
     <style>
         :root {
             --bg: #f7f7f3;
@@ -144,9 +144,10 @@
 </head>
 <body>
     <nav class="nav">
-        <div class="brand">Bibliotheque</div>
-        <a href="<?= site_url('/') ?>">Catalogue</a>
-        <a href="<?= site_url('/clients') ?>">Ajouter un livre</a>
+        <div class="brand">Mobile Money</div>
+        <a href="<?= site_url('/') ?>">Dashboard</a>
+        <a href="<?= site_url('/clients') ?>">Clients</a>
+        <a href="<?= site_url('/configuration') ?>">Configuration</a>
     </nav>
 
     <main class="container">
