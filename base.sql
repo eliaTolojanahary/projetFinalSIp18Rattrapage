@@ -1,5 +1,4 @@
-CREATE DATABASE mobile_money;
-USE mobile_money;
+
 CREATE TABLE prefixes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     prefixe VARCHAR(3) NOT NULL UNIQUE,     -- ex: '033', '037'
