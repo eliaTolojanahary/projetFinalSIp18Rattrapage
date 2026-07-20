@@ -131,3 +131,5 @@ http://localhost:8080/
             - `TransactionOperatorModel::totalFrais()` => modifier pour avoir seulement les frais pour operateur principal
             -  `TransactionOperatorModel::totalFraisAutre()` => modifier pour avoir seulement les frais pour operateur les autres
         - Situation des montants à envoyer à chaque opérateur
+
+
