@@ -28,8 +28,8 @@ class CreateLivresTable extends Migration
                 'constraint' => 20,
             ],
             'annee_publication' => [
-                'type'       => 'YEAR',
-                'null'       => true,
+                'type' => 'INT',
+                'null' => true,
             ],
             'categorie' => [
                 'type'       => 'VARCHAR',
@@ -46,8 +46,8 @@ class CreateLivresTable extends Migration
                 'null'       => true,
             ],
             'statut' => [
-                'type'       => 'ENUM',
-                'constraint' => ['disponible', 'prete'],
+                'type'       => 'VARCHAR',
+                'constraint' => 20,
                 'default'    => 'disponible',
             ],
             'created_at' => [
@@ -62,11 +62,7 @@ class CreateLivresTable extends Migration
 
         $this->forge->addKey('id', true);
         $this->forge->addUniqueKey('isbn');
-        $this->forge->createTable('livres', true, [
-            'ENGINE'  => 'InnoDB',
-            'CHARSET' => 'utf8mb4',
-            'COLLATE' => 'utf8mb4_unicode_ci',
-        ]);
+        $this->forge->createTable('livres', true);
     }
 
     public function down()

@@ -29,14 +29,13 @@
 #--------------------------------------------------------------------
 # DATABASE
 #--------------------------------------------------------------------
-
 database.default.hostname = localhost
-database.default.database = bibliotheque
-database.default.username = root
+database.default.database = mobile_money.db
+database.default.username =
 database.default.password =
-database.default.DBDriver = MySQLi
+database.default.DBDriver = SQLite3
 database.default.DBPrefix =
-database.default.port = 3306
+database.default.port =
 
 # If you use MySQLi as tests, first update the values of Config\Database::$tests.
 # database.tests.hostname = localhost
