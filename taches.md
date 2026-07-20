@@ -42,29 +42,58 @@
         - Numéro de téléphone
         - Nom et Prenom 
         - Info en plus ...
+        - **Non implémenté** (prévoir une architecture pour l'ajouter plus tard)
     - `Page 2: Liste client`
-        * Route: /clients 
-        * Table : 
+        * Route: `/clients`
+        * Table: 
             - Num tel
-            - Client Assigne
-            - Num Compte (optionnel - default = num tel)
-            - Montant dans le compte principal => Solde = Situation compte = somme dépôt - somme retrait - somme transfert => dont origine client 
-            - Action detail => voir les information du client /clients/:idCompte
-        * Fonction:
-            - getSituationCompte() => liste avec tout les comptes clients 
-            - getSituationCompte(idCompte) => detail pour un compte client specifique => info accessible a l'admin
-    - `Page 3: Configuration`
-        * Route : /operator/config
-        * Form: Configuration des préfixes valable de l’opérateur (ex: 033 et 037)
-            - préfixes (string)
-            - libellé 
-        * Création de types d'opérations avec des barèmes de frais par tranche de montant
-            - select type transaction 
-            - montant min 
-            - montant max
-            - frais applique => datalist si frais existant    
-    - `Page 4: Dashboard`
-        * Situation gain via les différents frais ( retrait et transfert)
-            - Montant somme frais qu'importe la transaction => depuist TransactionOpratorModel.php/totalFrais()
-        * Situation des comptes clients 
-            - Bouton vers liste des clients /clients
+            - Client (prénom + nom)
+            - Num Compte (= num tel par défaut)
+            - Solde (mis à jour à chaque opération)
+            - Action detail → `/clients/:idCompte`
+        * Modèle: `CompteOperatorModel`
+            - `getSituationCompte()` → liste tous les comptes clients
+            - `getSituationCompteParId(int $id)` → détail d'un compte client
+            - `countAllClients()` → nombre total de clients
+            - `totalMontantDetenu()` → somme des soldes de tous les comptes
+            - `updateSolde(int $id, float $solde)` → met à jour le solde d'un compte
+    - `Page 3: Détail client`
+        * Route: `/clients/:id`
+        * Fiche Client:
+            - Nom, Prénom, Téléphone, Numéro de compte
+            - Solde actuel (source de vérité, mis à jour à chaque transaction)
+        * Situation du compte:
+            - Total Dépôts, Total Retraits, Total Transferts
+            - Le solde est calculé par `comptes.solde` (dénormalisé, mis à jour atomiquement)
+        * Modèle: `CompteOperatorModel::getSituationCompteParIdWithTransactions(int $id)`
+    - `Page 4: Configuration`
+        * Route: `/configuration`
+        * Préfixes:
+            - Création: préfixe (string) + libellé
+            - Toggle actif/inactif
+            - Suppression
+            - API: `GET /api/prefixes` → préfixes actifs en JSON (pour datalist côté client)
+        * Barèmes de frais:
+            - Création: type d'opération + montant min + montant max + frais
+            - Suppression
+            - Lookup: `ConfigurationOperatorModel::getFraisForMontant(int $typeOperationId, float $montant)` → trouve le barème applicable automatiquement
+    - `Page 5: Dashboard`
+        * Route: `/`
+        * Situation des frais perçus (retraits & transferts)
+            - `TransactionOperatorModel::totalFrais()`
+        * Situation des comptes clients
+            - Nombre total de clients
+            - Montant total détenu (somme des soldes)
+            - Bouton vers `/clients`
+    - `Services métier`
+        * `TransactionOperatorModel::creerTransaction(array $data)`
+            - Vérifie le solde suffisant (retraits/transferts)
+            - Crée 2 lignes par transfert (source + destination)
+            - Met à jour `comptes.solde` atomiquement (transaction DB)
+            - Retourne `false` si solde insuffisant
+        * `CompteOperatorModel::updateSolde(int $id, float $solde)`
+            - Écrit le nouveau solde dans `comptes.solde`
+            - Appelé par `creerTransaction()` après chaque opération
+        * Formule solde:
+            - `Solde = +dépôts - retraits - transferts sortants + transferts entrants`
+            - Stocké dans `comptes.solde` (pas recalculé à la lecture)
