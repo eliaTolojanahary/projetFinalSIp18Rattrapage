@@ -1,0 +1,64 @@
+Pas de souci, on fait le tri. Je te donne le **strict noyau** de CodeIgniter — le reste (Filters, layouts, agrégats SQL...) tu le rajouteras plus tard, une fois ce socle solide.
+
+## Les 5 bases indispensables
+
+### 1. Le cycle MVC (comprendre le flux, pas le code)
+
+```
+URL → Route → Contrôleur → Modèle (BDD) → Vue → réponse HTML
+```
+
+Toute page CI passe par ce chemin. Si tu comprends **dans quel ordre** ça s'exécute, tu comprends 80% du framework.
+
+### 2. Les routes — relier une URL à une méthode
+
+```php
+$routes->get('articles', 'Articles::index');
+$routes->get('articles/(:num)/edit', 'Articles::edit/$1');
+```
+- `(:num)` capture un nombre dans l'URL
+- `$1` = "ce qui a été capturé", devient un argument du contrôleur
+
+C'est tout ce qu'il faut savoir pour l'instant sur le routing.
+
+### 3. Le contrôleur — reçoit la requête, renvoie une réponse
+
+```php
+class Articles extends BaseController
+{
+    public function index()
+    {
+        $data['articles'] = $this->articleModel->findAll();
+        return view('articles/index', $data);
+    }
+}
+```
+- `$this->request->getPost('champ')` pour lire un formulaire
+- `return view('dossier/fichier', $data)` pour afficher une vue
+- `return redirect()->to('/quelquepart')` pour rediriger
+
+### 4. Le modèle — parle à la base de données
+
+```php
+class ArticleModel extends Model
+{
+    protected $table = 'articles';
+    protected $allowedFields = ['titre', 'contenu'];
+}
+```
+4 méthodes à connaître par cœur, rien d'autre :
+- `findAll()` → tous les enregistrements
+- `find($id)` → un seul
+- `insert($data)` / `save($data)` → créer
+- `update($id, $data)` → modifier
+- `delete($id)` → supprimer
+
+### 5. La vue — affiche les données reçues
+
+```php
+<?php foreach ($articles as $a): ?>
+    <?= esc($a['titre']) ?>
+<?php endforeach; ?>
+```
+- Le tableau `$data['xxx']` du contrôleur devient la variable `$xxx` dans la vue (automatique)
+- `esc()` pour afficher du texte utilisateur en sécurité
