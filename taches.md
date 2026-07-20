@@ -120,13 +120,12 @@ http://localhost:8080/
 - **Coté opérateur** : Jemima (etu003370) 
     - Table prefixe:
         + boolean est operateur principal
-    - Configuration % en plus de commissions pour les transferts vers les autres opérateurs par rapport au montant envoye
         + Table commission
             - id 
             - idprefixe  
             - % 
     - `Page 5: Dashboard`
         - Sur la page “Situation gain via les différents frais” ,
-            - `TransactionOperatorModel::totalFrais()` => modifier pour avoir seulement les frais pour operateur principal
-            -  `TransactionOperatorModel::totalFraisAutre()` => modifier pour avoir seulement les frais pour operateur les autres
+            - `TransactionOperatorModel::totalFrais()` => modifier pour avoir seulement les frais pour operateur principal 
+            - `TransactionOperatorModel::totalFraisAutre()` => modifier pour avoir seulement les frais pour operateur les autres
         - Situation des montants à envoyer à chaque opérateur

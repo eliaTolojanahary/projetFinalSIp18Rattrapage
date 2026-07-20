@@ -42,7 +42,7 @@ CREATE TABLE baremes_frais (
     FOREIGN KEY(type_operation_id)
         REFERENCES types_operations(id)
 );
- CREATE TABLE commission(
+ CREATE TABLE commission (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     id_prefixe INTEGER NOT NULL,
     pourcentage DECIMAL(15,2) NOT NULL
