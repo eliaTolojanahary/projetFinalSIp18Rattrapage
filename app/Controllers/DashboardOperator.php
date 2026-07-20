@@ -13,9 +13,11 @@ class DashboardOperator extends BaseController
         $compteModel = new CompteOperatorModel();
 
         $data = [
-            'totalFrais'       => $transactionModel->totalFrais(),
-            'nbClients'        => $compteModel->countAllClients(),
-            'totalMontant'     => $compteModel->totalMontantDetenu(),
+            'totalFrais'         => $transactionModel->totalFrais(),
+            'totalFraisAutre'    => $transactionModel->totalFraisAutre(),
+            'montantsParOperateur' => $transactionModel->montantsParOperateur(),
+            'nbClients'          => $compteModel->countAllClients(),
+            'totalMontant'       => $compteModel->totalMontantDetenu(),
         ];
 
         return view('operator/dashboard', $data);

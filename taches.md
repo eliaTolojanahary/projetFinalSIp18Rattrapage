@@ -125,12 +125,28 @@ http://localhost:8080/
 - **Coté opérateur** : Jemima (etu003370) 
     - Table prefixe:
         + boolean est operateur principal
-        + Table commission
-            - id 
-            - idprefixe  
-            - % 
+    + Table commission
+        - id 
+        - idprefixe  
+        - %
+    - Table transactions:
+        + commission  
     - `Page 5: Dashboard`
-        - Sur la page “Situation gain via les différents frais” ,
-            - `TransactionOperatorModel::totalFrais()` => modifier pour avoir seulement les frais pour operateur principal 
+            - `TransactionOperatorModel::totalFrais()` 
+                * Retourne uniquement le montant total des frais perçus par l'opérateur principal.
+                * Agrège les frais des opérations de retrait et de transfert appartenant à l'opérateur principal.
+                * Utilisé pour afficher les gains de l'opérateur principal sur le Dashboard. 
             - `TransactionOperatorModel::totalFraisAutre()` => modifier pour avoir seulement les frais pour operateur les autres
-        - Situation des montants à envoyer à chaque opérateur
+                * Retourne uniquement le montant total des frais perçus par les autres opérateurs.
+                * Agrège les frais des opérations de retrait et de transfert réalisées par les opérateurs secondaires.
+                * Utilisé pour distinguer les gains des autres opérateurs de ceux de l'opérateur principal.
+            - Situation des montants à envoyer à chaque opérateur
+                => Affiche le montant total des frais ou des sommes dues à chaque opérateur.
+                - `TransactionOperatorModel::montantsParOperateur()`
+                    * Regroupe les transactions par opérateur.
+                    * Calcule le total des montants ou frais à reverser pour chaque opérateur.
+                    * Retourne une liste contenant :
+                        - id_operateur
+                        - nom_operateur
+                        - montant_total
+                        - nombre_transactions (optionnel)
