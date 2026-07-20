@@ -19,6 +19,16 @@ class CreateComptesTable extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
             ],
+            'nom' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 100,
+                'null'       => true,
+            ],
+            'prenom' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 100,
+                'null'       => true,
+            ],
             'solde' => [
                 'type'       => 'DECIMAL',
                 'constraint' => '15,2',

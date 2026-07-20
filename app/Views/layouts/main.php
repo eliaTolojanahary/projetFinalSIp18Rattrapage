@@ -146,7 +146,7 @@
     <nav class="nav">
         <div class="brand">Bibliotheque</div>
         <a href="<?= site_url('/') ?>">Catalogue</a>
-        <a href="<?= site_url('livres/ajouter') ?>">Ajouter un livre</a>
+        <a href="<?= site_url('/clients') ?>">Ajouter un livre</a>
     </nav>
 
     <main class="container">

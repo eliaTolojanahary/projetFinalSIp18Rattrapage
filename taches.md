@@ -43,12 +43,16 @@
         - Nom et Prenom 
         - Info en plus ...
     - `Page 2: Liste client`
+        * Route: /clients 
         * Table : 
             - Num tel
             - Client Assigne
             - Num Compte (optionnel - default = num tel)
             - Montant dans le compte principal => Situation compte = somme dépôt - somme retrait - somme transfert => dont origine client 
-            - Action detail => voir les information du client 
+            - Action detail => voir les information du client /clients/:idCompte
+        * Fonction:
+            - getSituationCompte() => liste avec tout les comptes clients 
+            - getSituationCompte(idCompte) => detail pour un compte client specifique => info accessible a l'admin
     - `Page 3: Configuration`
         * Form: Configuration des préfixes valable de l’opérateur (ex: 033 et 037)
             - préfixes (string)
@@ -60,6 +64,6 @@
             - frais applique => datalist   
     - `Page 4: Dashboard`
         * Situation gain via les différents frais ( retrait et transfert)
-            - Montant somme frais qu'importe la transaction => depuist TransactionOpratorModel.php
+            - Montant somme frais qu'importe la transaction => depuist TransactionOpratorModel.php/totalFrais()
         * Situation des comptes clients 
-            - Bouton vers liste des clients 
+            - Bouton vers liste des clients /clients
