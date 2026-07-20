@@ -31,3 +31,4 @@ $routes->get('configuration/bareme/(:num)/delete', 'ConfigurationOperator::delet
 
 // API
 $routes->get('api/prefixes', 'Api::prefixes');
+$routes->get('logout', 'Client::logout');

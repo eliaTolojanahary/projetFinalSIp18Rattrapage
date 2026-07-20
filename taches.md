@@ -1,7 +1,14 @@
 # Systeme operateur : simulation mobile money
 
+composer install
+cp env .env
+sqlite3 writable/mobile_money.db < base.sql
+php spark serve
 ## Version 1
-- **Coté client**
+http://localhost:8080/
+- **Coté client**: Elia (etu003230)
+
+
     - `Page 1: Login`
 # Systeme operateur : simulation mobile money
 
@@ -46,7 +53,8 @@
         - Compte debite => le compte qui recoit l'argent (optionnel en fonction du type de transaction) 
         - Compte credite => le compte qui envoi l'argent (optionnel en fonction du type de transaction)
 
-- **Coté opérateur**
+
+- **Coté opérateur** : Jemima (etu003370)
     - `Page 1: Signin`
         - Table comptes
         - Numéro de téléphone
