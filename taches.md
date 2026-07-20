@@ -39,6 +39,7 @@
 
 - **Coté opérateur**
     - `Page 1: Signin`
+        - Table comptes
         - Numéro de téléphone
         - Nom et Prenom 
         - Info en plus ...
