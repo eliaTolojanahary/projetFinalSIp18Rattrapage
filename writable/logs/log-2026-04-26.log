@@ -1,0 +1,179 @@
+CRITICAL - 2026-04-26 15:44:05 --> CodeIgniter\Exceptions\CriticalError: The required PHP extension "mysqli" is not loaded. Install and enable it to use "MySQLi" driver.
+[Method: CLI, Route: migrate]
+in SYSTEMPATH\Database\Database.php on line 186.
+ 1 SYSTEMPATH\Database\Database.php(59): CodeIgniter\Database\Database->checkDbExtension('MySQLi')
+ 2 SYSTEMPATH\Database\Config.php(82): CodeIgniter\Database\Database->load([...], 'default')
+ 3 SYSTEMPATH\Common.php(391): CodeIgniter\Database\Config::connect('default', true)
+ 4 SYSTEMPATH\Database\MigrationRunner.php(156): db_connect(null)
+ 5 SYSTEMPATH\Config\Services.php(421): CodeIgniter\Database\MigrationRunner->__construct(Object(Config\Migrations), null)
+ 6 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::migrations(Object(Config\Migrations), null, false)
+ 7 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('migrations', [...])
+ 8 SYSTEMPATH\Config\Services.php(416): CodeIgniter\Config\BaseService::getSharedInstance('migrations', null, null)
+ 9 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::migrations()
+10 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('migrations', [])
+11 SYSTEMPATH\Common.php(1078): CodeIgniter\Config\BaseService::get('migrations')
+12 SYSTEMPATH\Commands\Database\Migrate.php(73): service('migrations')
+13 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run([])
+14 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', [])
+15 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+16 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+17 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+CRITICAL - 2026-04-26 15:44:53 --> CodeIgniter\Exceptions\CriticalError: The required PHP extension "mysqli" is not loaded. Install and enable it to use "MySQLi" driver.
+[Method: GET, Route: /]
+in SYSTEMPATH\Database\Database.php on line 186.
+ 1 SYSTEMPATH\Database\Database.php(59): CodeIgniter\Database\Database->checkDbExtension('MySQLi')
+ 2 SYSTEMPATH\Database\Config.php(82): CodeIgniter\Database\Database->load([...], 'default')
+ 3 SYSTEMPATH\Model.php(150): CodeIgniter\Database\Config::connect('default')
+ 4 APPPATH\Controllers\Livres.php(14): CodeIgniter\Model->__construct()
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Livres->index()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Livres))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('C:\\Users\\Admin\\Documents\\S6\\rattrapageSI\\codeIgniter\\codeigniter4-framework-b3359be\\public\\index.php')
+CRITICAL - 2026-04-26 15:47:17 --> CodeIgniter\Exceptions\CriticalError: The required PHP extension "mysqli" is not loaded. Install and enable it to use "MySQLi" driver.
+[Method: GET, Route: /]
+in SYSTEMPATH\Database\Database.php on line 186.
+ 1 SYSTEMPATH\Database\Database.php(59): CodeIgniter\Database\Database->checkDbExtension('MySQLi')
+ 2 SYSTEMPATH\Database\Config.php(82): CodeIgniter\Database\Database->load([...], 'default')
+ 3 SYSTEMPATH\Model.php(150): CodeIgniter\Database\Config::connect('default')
+ 4 APPPATH\Controllers\Livres.php(14): CodeIgniter\Model->__construct()
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Livres->index()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Livres))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('C:\\Users\\Admin\\Documents\\S6\\rattrapageSI\\codeIgniter\\codeigniter4-framework-b3359be\\public\\index.php')
+ERROR - 2026-04-26 15:50:13 --> Error connecting to the database: mysqli_sql_exception: Aucune connexion n’a pu être établie car l’ordinateur cible l’a expressément refusée in C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'bibliotheque', 3306, '', 0)
+#1 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*)...', Array, false)
+#4 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Model.php(523): CodeIgniter\Database\BaseBuilder->countAllResults(false)
+#5 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\BaseModel.php(1333): CodeIgniter\Model->countAllResults(false)
+#6 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\app\Models\LivreModel.php(91): CodeIgniter\BaseModel->paginate(10)
+#7 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\app\Controllers\Livres.php(25): App\Models\LivreModel->livresPagine()
+#8 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\CodeIgniter.php(951): App\Controllers\Livres->index()
+#9 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Livres))
+#10 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\rewrite.php(44): require_once('C:\\Users\\Admin\\...')
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Aucune connexion n’a pu être établie car l’ordinateur cible l’a expressément refusée in C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*)...', Array, false)
+#3 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Model.php(523): CodeIgniter\Database\BaseBuilder->countAllResults(false)
+#4 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\BaseModel.php(1333): CodeIgniter\Model->countAllResults(false)
+#5 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\app\Models\LivreModel.php(91): CodeIgniter\BaseModel->paginate(10)
+#6 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\app\Controllers\Livres.php(25): App\Models\LivreModel->livresPagine()
+#7 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\CodeIgniter.php(951): App\Controllers\Livres->index()
+#8 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Livres))
+#9 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 C:\Users\Admin\Documents\S6\rattrapageSI\codeIgniter\codeigniter4-framework-b3359be\system\rewrite.php(44): require_once('C:\\Users\\Admin\\...')
+#14 {main}
+CRITICAL - 2026-04-26 15:50:13 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Aucune connexion n’a pu être établie car l’ordinateur cible l’a expressément refusée
+[Method: GET, Route: /]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `livres`', [], false)
+ 3 SYSTEMPATH\Model.php(523): CodeIgniter\Database\BaseBuilder->countAllResults(false)
+ 4 SYSTEMPATH\BaseModel.php(1333): CodeIgniter\Model->countAllResults(false)
+ 5 APPPATH\Models\LivreModel.php(91): CodeIgniter\BaseModel->paginate(10)
+ 6 APPPATH\Controllers\Livres.php(25): App\Models\LivreModel->livresPagine()
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Livres->index()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Livres))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('C:\\Users\\Admin\\Documents\\S6\\rattrapageSI\\codeIgniter\\codeigniter4-framework-b3359be\\public\\index.php')
+ERROR - 2026-04-26 15:54:12 --> Table 'bibliotheque.livres' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT COUNT(*) AS `numrows`
+FROM `livres`', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `livres`')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `livres`')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `livres`', [], false)
+ 5 SYSTEMPATH\Model.php(523): CodeIgniter\Database\BaseBuilder->countAllResults(false)
+ 6 SYSTEMPATH\BaseModel.php(1333): CodeIgniter\Model->countAllResults(false)
+ 7 APPPATH\Models\LivreModel.php(91): CodeIgniter\BaseModel->paginate(10)
+ 8 APPPATH\Controllers\Livres.php(25): App\Models\LivreModel->livresPagine()
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Livres->index()
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Livres))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+15 SYSTEMPATH\rewrite.php(44): require_once('C:\\Users\\Admin\\Documents\\S6\\rattrapageSI\\codeIgniter\\codeigniter4-framework-b3359be\\public\\index.php')
+CRITICAL - 2026-04-26 15:54:12 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'bibliotheque.livres' doesn't exist
+[Method: GET, Route: /]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `livres`', [], false)
+ 2 SYSTEMPATH\Model.php(523): CodeIgniter\Database\BaseBuilder->countAllResults(false)
+ 3 SYSTEMPATH\BaseModel.php(1333): CodeIgniter\Model->countAllResults(false)
+ 4 APPPATH\Models\LivreModel.php(91): CodeIgniter\BaseModel->paginate(10)
+ 5 APPPATH\Controllers\Livres.php(25): App\Models\LivreModel->livresPagine()
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Livres->index()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Livres))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\Users\\Admin\\Documents\\S6\\rattrapageSI\\codeIgniter\\codeigniter4-framework-b3359be\\public\\index.php')
+CRITICAL - 2026-04-26 15:54:12 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'bibliotheque.livres' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `livres`')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `livres`')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `livres`', [], false)
+ 4 SYSTEMPATH\Model.php(523): CodeIgniter\Database\BaseBuilder->countAllResults(false)
+ 5 SYSTEMPATH\BaseModel.php(1333): CodeIgniter\Model->countAllResults(false)
+ 6 APPPATH\Models\LivreModel.php(91): CodeIgniter\BaseModel->paginate(10)
+ 7 APPPATH\Controllers\Livres.php(25): App\Models\LivreModel->livresPagine()
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Livres->index()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Livres))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+14 SYSTEMPATH\rewrite.php(44): require_once('C:\\Users\\Admin\\Documents\\S6\\rattrapageSI\\codeIgniter\\codeigniter4-framework-b3359be\\public\\index.php')
+CRITICAL - 2026-04-26 15:54:12 --> [Caused by] mysqli_sql_exception: Table 'bibliotheque.livres' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT COUNT(*) AS `numrows`
+FROM `livres`', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `livres`')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `livres`')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `livres`', [], false)
+ 5 SYSTEMPATH\Model.php(523): CodeIgniter\Database\BaseBuilder->countAllResults(false)
+ 6 SYSTEMPATH\BaseModel.php(1333): CodeIgniter\Model->countAllResults(false)
+ 7 APPPATH\Models\LivreModel.php(91): CodeIgniter\BaseModel->paginate(10)
+ 8 APPPATH\Controllers\Livres.php(25): App\Models\LivreModel->livresPagine()
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Livres->index()
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Livres))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+15 SYSTEMPATH\rewrite.php(44): require_once('C:\\Users\\Admin\\Documents\\S6\\rattrapageSI\\codeIgniter\\codeigniter4-framework-b3359be\\public\\index.php')
