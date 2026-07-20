@@ -50,74 +50,142 @@ class DataSeeder extends Seeder
             ['type_operation_id' => 3, 'montant_min' => 20001,  'montant_max' => 100000, 'frais' => 750],
         ]);
 
-        // --- Comptes clients ---
+        // --- Comptes clients (solde initialisé à 0, mis à jour après les transactions) ---
         $this->db->table('comptes')->insertBatch([
-            ['numero_telephone' => '033123456', 'nom' => 'Rakoto', 'prenom' => 'Jean',   'solde' => 15000],
-            ['numero_telephone' => '037456789', 'nom' => 'Rasoa',  'prenom' => 'Marie',  'solde' => 8500],
-            ['numero_telephone' => '033987654', 'nom' => 'Andry',  'prenom' => 'Paul',   'solde' => 42000],
-            ['numero_telephone' => '037111222', 'nom' => 'Hery',   'prenom' => 'Claire', 'solde' => 27500],
-            ['numero_telephone' => '033333444', 'nom' => 'Rabe',   'prenom' => 'Daniel', 'solde' => 3000],
+            ['numero_telephone' => '033123456', 'nom' => 'Rakoto', 'prenom' => 'Jean',   'solde' => 0],
+            ['numero_telephone' => '037456789', 'nom' => 'Rasoa',  'prenom' => 'Marie',  'solde' => 0],
+            ['numero_telephone' => '033987654', 'nom' => 'Andry',  'prenom' => 'Paul',   'solde' => 0],
+            ['numero_telephone' => '037111222', 'nom' => 'Hery',   'prenom' => 'Claire', 'solde' => 0],
+            ['numero_telephone' => '033333444', 'nom' => 'Rabe',   'prenom' => 'Daniel', 'solde' => 0],
         ]);
 
         // --- Transactions ---
+        // 2 lignes par transfert (source + destination)
+        // solde_apres calculé pour chaque ligne
         // baremes_frais_id: 1=depot(100-10000), 2=depot(10001-50000), 3=depot(50001-200000)
         //                   4=retrait(100-5000), 5=retrait(5001-20000), 6=retrait(20001-50000)
         //                   7=transfert(100-5000), 8=transfert(5001-20000), 9=transfert(20001-100000)
         $this->db->table('transactions')->insertBatch([
+            // Rakoto: depot 15000
             [
                 'compte_id'             => 1,
                 'type_operation_id'     => 1,
-                'montant'               => 5000,
-                'baremes_frais_id'      => 1,
+                'montant'               => 15000,
+                'baremes_frais_id'      => 2,
                 'compte_destination_id' => null,
-                'solde_apres'           => 5000,
+                'solde_apres'           => 15000,
                 'date_operation'        => '2026-06-01 10:00:00',
             ],
+            // Rasoa: depot 10000
+            [
+                'compte_id'             => 2,
+                'type_operation_id'     => 1,
+                'montant'               => 10000,
+                'baremes_frais_id'      => 1,
+                'compte_destination_id' => null,
+                'solde_apres'           => 10000,
+                'date_operation'        => '2026-06-02 09:00:00',
+            ],
+            // Rasoa: retrait 3000
             [
                 'compte_id'             => 2,
                 'type_operation_id'     => 2,
                 'montant'               => 3000,
                 'baremes_frais_id'      => 4,
                 'compte_destination_id' => null,
-                'solde_apres'           => 2900,
-                'date_operation'        => '2026-06-10 09:00:00',
+                'solde_apres'           => 7000,
+                'date_operation'        => '2026-06-03 09:00:00',
             ],
+            // Andry: depot 20000
+            [
+                'compte_id'             => 3,
+                'type_operation_id'     => 1,
+                'montant'               => 20000,
+                'baremes_frais_id'      => 2,
+                'compte_destination_id' => null,
+                'solde_apres'           => 20000,
+                'date_operation'        => '2026-06-04 10:00:00',
+            ],
+            // Andry → Hery: transfert 5000 (source)
             [
                 'compte_id'             => 3,
                 'type_operation_id'     => 3,
-                'montant'               => 10000,
-                'baremes_frais_id'      => 8,
+                'montant'               => 5000,
+                'baremes_frais_id'      => 7,
                 'compte_destination_id' => 4,
-                'solde_apres'           => 9850,
-                'date_operation'        => '2026-06-15 14:30:00',
+                'solde_apres'           => 15000,
+                'date_operation'        => '2026-06-05 14:30:00',
             ],
+            // Hery ← Andry: transfert 5000 (destination)
+            [
+                'compte_id'             => 4,
+                'type_operation_id'     => 3,
+                'montant'               => 5000,
+                'baremes_frais_id'      => 7,
+                'compte_destination_id' => 3,
+                'solde_apres'           => 5000,
+                'date_operation'        => '2026-06-05 14:30:00',
+            ],
+            // Hery: depot 20000
             [
                 'compte_id'             => 4,
                 'type_operation_id'     => 1,
                 'montant'               => 20000,
                 'baremes_frais_id'      => 2,
                 'compte_destination_id' => null,
-                'solde_apres'           => 20000,
-                'date_operation'        => '2026-06-20 11:00:00',
+                'solde_apres'           => 25000,
+                'date_operation'        => '2026-06-06 11:00:00',
             ],
+            // Rabe: depot 5000
+            [
+                'compte_id'             => 5,
+                'type_operation_id'     => 1,
+                'montant'               => 5000,
+                'baremes_frais_id'      => 1,
+                'compte_destination_id' => null,
+                'solde_apres'           => 5000,
+                'date_operation'        => '2026-06-07 08:00:00',
+            ],
+            // Rabe: retrait 2000
             [
                 'compte_id'             => 5,
                 'type_operation_id'     => 2,
                 'montant'               => 2000,
                 'baremes_frais_id'      => 4,
                 'compte_destination_id' => null,
-                'solde_apres'           => 1900,
-                'date_operation'        => '2026-06-25 08:00:00',
+                'solde_apres'           => 3000,
+                'date_operation'        => '2026-06-08 08:00:00',
             ],
+            // Rakoto → Andry: transfert 3000 (source)
             [
                 'compte_id'             => 1,
                 'type_operation_id'     => 3,
                 'montant'               => 3000,
                 'baremes_frais_id'      => 7,
                 'compte_destination_id' => 3,
-                'solde_apres'           => 2850,
-                'date_operation'        => '2026-06-28 16:00:00',
+                'solde_apres'           => 12000,
+                'date_operation'        => '2026-06-09 16:00:00',
+            ],
+            // Andry ← Rakoto: transfert 3000 (destination)
+            [
+                'compte_id'             => 3,
+                'type_operation_id'     => 3,
+                'montant'               => 3000,
+                'baremes_frais_id'      => 7,
+                'compte_destination_id' => 1,
+                'solde_apres'           => 18000,
+                'date_operation'        => '2026-06-09 16:00:00',
             ],
         ]);
+
+        // --- Mise à jour des soldes des comptes ---
+        // Le solde de chaque compte = solde_apres de sa dernière transaction
+        $this->db->query('
+            UPDATE comptes SET solde = (
+                SELECT t.solde_apres FROM transactions t
+                WHERE t.compte_id = comptes.id
+                ORDER BY t.id DESC LIMIT 1
+            )
+        ');
     }
 }

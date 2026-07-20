@@ -29,6 +29,11 @@ class CompteOperatorModel extends Model
         return $this->find($id);
     }
 
+    public function updateSolde(int $id, float $solde): void
+    {
+        $this->update($id, ['solde' => $solde]);
+    }
+
     public function countAllClients(): int
     {
         return $this->countAllResults();
@@ -55,16 +60,12 @@ class CompteOperatorModel extends Model
             ->select('
                 COALESCE(SUM(CASE WHEN t.type_operation_id = 1 THEN t.montant ELSE 0 END), 0) AS total_depots,
                 COALESCE(SUM(CASE WHEN t.type_operation_id = 2 THEN t.montant ELSE 0 END), 0) AS total_retraits,
-                COALESCE(SUM(CASE WHEN t.type_operation_id = 3 AND t.compte_id = ' . (int) $id . ' THEN t.montant ELSE 0 END), 0) AS total_transferts_sortants,
-                COALESCE(SUM(CASE WHEN t.type_operation_id = 3 AND t.compte_destination_id = ' . (int) $id . ' THEN t.montant ELSE 0 END), 0) AS total_transferts_entrants
+                COALESCE(SUM(CASE WHEN t.type_operation_id = 3 THEN t.montant ELSE 0 END), 0) AS total_transferts
             ')
             ->where('t.compte_id', $id)
             ->orWhere('t.compte_destination_id', $id)
             ->get()
             ->getRowArray();
-
-        $s = $compte['situation'];
-        $compte['solde_calcule'] = $s['total_depots'] - $s['total_retraits'] - $s['total_transferts_sortants'] + $s['total_transferts_entrants'];
 
         return $compte;
     }

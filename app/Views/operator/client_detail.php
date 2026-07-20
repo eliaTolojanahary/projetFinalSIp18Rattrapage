@@ -53,23 +53,14 @@
             </td>
         </tr>
         <tr>
-            <th>Total Transferts sortants</th>
-            <td style="color:var(--danger);font-weight:700;">
-                <?= esc(number_format($client['situation']['total_transferts_sortants'] ?? 0, 2)) ?> $
+            <th>Total Transferts</th>
+            <td style="font-weight:700;">
+                <?= esc(number_format($client['situation']['total_transferts'] ?? 0, 2)) ?> $
             </td>
         </tr>
         <tr>
-            <th>Total Transferts entrants</th>
-            <td style="color:var(--ok);font-weight:700;">
-                <?= esc(number_format($client['situation']['total_transferts_entrants'] ?? 0, 2)) ?> $
-            </td>
-        </tr>
-        <tr>
-            <th><strong>Solde calculé</strong></th>
-            <td>
-                <span class="status <?= ($client['solde_calcule'] >= 0) ? 'status-disponible' : 'status-prete' ?>">
-                    <strong><?= esc(number_format($client['solde_calcule'], 2)) ?> $</strong>
-                </span>
+            <td colspan="2" class="muted" style="padding-top:12px;font-size:13px;">
+                Le solde est mis à jour à chaque opération (dépôt, retrait ou transfert).
             </td>
         </tr>
     </table>
