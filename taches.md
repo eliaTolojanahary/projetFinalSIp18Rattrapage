@@ -60,6 +60,6 @@
             - frais applique => datalist   
     - `Page 4: Dashboard`
         * Situation gain via les différents frais ( retrait et transfert)
-            - Montant somme frais qu'importe la transaction
+            - Montant somme frais qu'importe la transaction => depuist TransactionOpratorModel.php
         * Situation des comptes clients 
             - Bouton vers liste des clients 

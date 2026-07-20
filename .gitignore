@@ -1,7 +1,11 @@
-*.log
+writable/cache/*
+writable/logs/*
+writable/session/*
+writable/debugbar/*
+writable/uploads/*
+!writable/*/index.html
+!writable/index.html
 /vendor/
-/writable/cache/*
-/writable/logs/*
-/writable/session/*
-/writable/uploads/*
+*.log
+*.db
 .env

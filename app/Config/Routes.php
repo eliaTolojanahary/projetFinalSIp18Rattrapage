@@ -5,7 +5,7 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Livres::index');
+$routes->get('/', 'DashboardOperator::index');
 
 
 $routes->get('livres', 'Livres::index');
