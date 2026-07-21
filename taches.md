@@ -169,4 +169,14 @@ http://localhost:8080/
     - `Page 6: login unique operateur`
         - login admin/admin (ecrit en dur sur le form)
         + crsf_field()
-        - redirect in dashboardOperator url: /operator form /
+        - redirect in dashboardOperator url: /operator form 
+
+## Fix liste clients :
+- **Coté opérateur** : Jemima (etu003370) 
+    - `Page 2: Liste client`
+            * Route: `/clients`
+            * Modèle: `ClientPrefixeModel` 
+                -  `estPrincipal(num)` → determine si un numero est de l'eperateur principal 
+            * Modèle: `CompteOperatorModel` 
+                - `updateSolde(int $id, float $solde)` → supprimmer existant Coté client
+                - `getSituationCompte()` → liste tous les comptes clients dont le numero correspond a l'operateur principal

@@ -18,20 +18,26 @@ class CompteOperatorModel extends Model
         'prenom',
         'solde',
     ];
-
+    
     public function getSituationCompte(): array
     {
-        return $this->orderBy('id', 'ASC')->findAll();
+        $clientPrefixe = new ClientPrefixeModel();
+
+        $allClients = $this->orderBy('id', 'ASC')->findAll();
+        $clients = [];
+
+        foreach ($allClients as $client) {
+            if ($clientPrefixe->estPrincipal($client['numero_telephone'])) {
+                $clients[] = $client;
+            }
+        }
+
+        return $clients;
     }
 
     public function getSituationCompteParId(int $id): ?array
     {
         return $this->find($id);
-    }
-
-    public function updateSolde(int $id, float $solde): void
-    {
-        $this->update($id, ['solde' => $solde]);
     }
 
     public function countAllClients(): int
