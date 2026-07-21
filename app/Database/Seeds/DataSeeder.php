@@ -9,9 +9,11 @@ class DataSeeder extends Seeder
     public function run()
     {
         $this->db->table('transactions')->truncate();
+        $this->db->table('epargnes')->truncate();
         $this->db->table('baremes_frais')->truncate();
         $this->db->table('commission')->truncate();
         $this->db->table('comptes')->truncate();
+        $this->db->table('promotion')->truncate();
         $this->db->table('types_operations')->truncate();
         $this->db->table('prefixes')->truncate();
 
@@ -20,7 +22,7 @@ class DataSeeder extends Seeder
         }
 
         $this->db->table('prefixes')->insertBatch([
-            ['prefixe' => '034', 'libelle' => 'Telma',  'actif' => 1, 'est_operateur_principal' => 1],
+            ['prefixe' => '034', 'libelle' => 'Yas',  'actif' => 1, 'est_operateur_principal' => 1],
             ['prefixe' => '038', 'libelle' => 'Yas',    'actif' => 1, 'est_operateur_principal' => 1],
             ['prefixe' => '033', 'libelle' => 'Orange', 'actif' => 1, 'est_operateur_principal' => 0],
             ['prefixe' => '032', 'libelle' => 'Orange', 'actif' => 1, 'est_operateur_principal' => 0],
@@ -53,13 +55,26 @@ class DataSeeder extends Seeder
             ['id_prefixe' => 6, 'pourcentage' => 15],
         ]);
 
+        $this->db->table('promotion')->insert([
+            'pourcentage' => 10,
+        ]);
+
         $this->db->table('comptes')->insertBatch([
-            ['numero_telephone' => '034123456', 'nom' => 'Rakoto', 'prenom' => 'Jean',   'solde' => 150000],
-            ['numero_telephone' => '038654321', 'nom' => 'Rasoa',  'prenom' => 'Marie',  'solde' => 120000],
-            ['numero_telephone' => '033111222', 'nom' => 'Andry',  'prenom' => 'Paul',   'solde' => 80000],
-            ['numero_telephone' => '032333444', 'nom' => 'Rabe',   'prenom' => 'Daniel', 'solde' => 60000],
-            ['numero_telephone' => '037555666', 'nom' => 'Hery',   'prenom' => 'Claire', 'solde' => 90000],
-            ['numero_telephone' => '031777888', 'nom' => 'Soa',    'prenom' => 'Luc',    'solde' => 40000],
+            ['numero_telephone' => '034123456', 'nom' => 'Rakoto', 'prenom' => 'Jean',   'solde' => 150000, 'pourcentage_epargne' => 20],
+            ['numero_telephone' => '038654321', 'nom' => 'Rasoa',  'prenom' => 'Marie',  'solde' => 120000, 'pourcentage_epargne' => 0],
+            ['numero_telephone' => '033111222', 'nom' => 'Andry',  'prenom' => 'Paul',   'solde' => 80000,  'pourcentage_epargne' => 10],
+            ['numero_telephone' => '032333444', 'nom' => 'Rabe',   'prenom' => 'Daniel', 'solde' => 60000,  'pourcentage_epargne' => 0],
+            ['numero_telephone' => '037555666', 'nom' => 'Hery',   'prenom' => 'Claire', 'solde' => 90000,  'pourcentage_epargne' => 0],
+            ['numero_telephone' => '031777888', 'nom' => 'Soa',    'prenom' => 'Luc',    'solde' => 40000,  'pourcentage_epargne' => 0],
+        ]);
+
+        $this->db->table('epargnes')->insertBatch([
+            ['id_compte' => 1],
+            ['id_compte' => 2],
+            ['id_compte' => 3],
+            ['id_compte' => 4],
+            ['id_compte' => 5],
+            ['id_compte' => 6],
         ]);
 
         $this->db->table('transactions')->insertBatch([
