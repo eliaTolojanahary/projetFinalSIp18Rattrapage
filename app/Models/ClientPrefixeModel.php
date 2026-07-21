@@ -18,4 +18,12 @@ class ClientPrefixeModel extends Model
                      ->where('actif', 1)
                      ->first() !== null;
     }
+   public function trouverPrefixe(string $numero): ?array
+{
+    $prefixe = substr($numero, 0, 3);
+
+    return $this->where('prefixe', $prefixe)
+                ->where('actif', 1)
+                ->first();
+}
 }

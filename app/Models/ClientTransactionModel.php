@@ -19,6 +19,9 @@ class ClientTransactionModel extends Model
         'compte_destination_id',
         'solde_apres',
         'date_operation',
+        'commission',
+        'inclure_frais_retrait',
+        'prefixe_destination_id'
     ];
 
 
@@ -27,7 +30,9 @@ class ClientTransactionModel extends Model
     return $this->select('
             transactions.id,
             transactions.date_operation,
-            transactions.montant,
+            transactions.montant AS montant,
+            transactions.commission AS commission,
+            transactions.inclure_frais_retrait,
             baremes_frais.frais AS montant_frais,
             types_operations.code AS type_code,
             types_operations.libelle AS type_libelle,

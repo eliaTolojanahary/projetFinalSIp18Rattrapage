@@ -194,157 +194,171 @@ public function retraitStore()
             'prefixesInfos' => $prefixesInfos,
         ]);
     }
+public function transfertStore()
+{
+    $compteId              = session()->get('compte_id');
+    $montantTotal          = (float) $this->request->getPost('montant');
+    $numeros               = $this->request->getPost('numero_destinataire');
+    $inclureFraisRetrait   = (bool) $this->request->getPost('inclure_frais_retrait');
+    $dateTransfert         = $this->request->getPost('date_transfert') ?: date('Y-m-d H:i:s');
 
-    public function transfertStore()
-    {
-        $compteId = session()->get('compte_id');
-        $montantTotal = (float) $this->request->getPost('montant_total');
-        $destinataires = $this->request->getPost('destinataires');
-        $inclureFraisRetrait = $this->request->getPost('inclure_frais_retrait');
+    $numeros = is_array($numeros) ? array_filter(array_map('trim', $numeros)) : [];
+    $numeros = array_values($numeros);
 
-        $destinataires = array_filter($destinataires, function($dest) {
-            return !empty($dest['numero']);
-        });
+    if (empty($numeros)) {
+        return redirect()->back()->withInput()->with('error', 'Sélectionnez au moins un destinataire.');
+    }
 
-        if (empty($destinataires)) {
-            return redirect()->back()->with('error', 'Sélectionnez au moins un destinataire.');
+    if (count($numeros) !== count(array_unique($numeros))) {
+        return redirect()->back()->withInput()->with('error', 'Vous ne pouvez pas sélectionner deux fois le même destinataire.');
+    }
+
+    if ($montantTotal <= 0) {
+        return redirect()->back()->withInput()->with('error', 'Montant total invalide.');
+    }
+
+    $compteModel = new ClientModel();
+    $compteOrigine = $compteModel->find($compteId);
+
+    if (! $compteOrigine) {
+        return redirect()->to('/')->with('error', 'Session expirée.');
+    }
+
+    $prefixeModel        = new ClientPrefixeModel();
+    $typeOperationModel  = new ClientOperationModel();
+    $baremeModel         = new ClientBaremeModel();
+    $commissionModel     = new ClientCommissionModel();
+    $transactionModel    = new ClientTransactionModel();
+
+    $typeTransfertId = $typeOperationModel->idParCode('transfert');
+    $typeRetraitId   = $typeOperationModel->idParCode('retrait');
+
+    $nombreDestinataires    = count($numeros);
+    $montantParDestinataire = round($montantTotal / $nombreDestinataires, 2);
+
+    $operations = [];
+    $totalAPrelevier = 0;
+
+    foreach ($numeros as $numero) {
+        if ($numero === $compteOrigine['numero_telephone']) {
+            return redirect()->back()->withInput()->with('error', 'Transfert vers soi-même impossible.');
         }
 
-        if ($montantTotal <= 0) {
-            return redirect()->back()->with('error', 'Montant total invalide.');
+        $prefixe = $prefixeModel->trouverPrefixe($numero);
+        if ($prefixe === null) {
+            return redirect()->back()->withInput()->with('error', "Préfixe non valable pour le numéro $numero.");
         }
 
-        $compteModel = new ClientModel();
-        $compteOrigine = $compteModel->find($compteId);
-        
-        if (!$compteOrigine) {
-            return redirect()->to('/login')->with('error', 'Session expirée.');
+        $estPrincipal = $prefixe['est_operateur_principal'];
+   
+        $fraisRetrait = 0;
+        $montantATransferer = $montantParDestinataire;
+
+        if ($inclureFraisRetrait && $estPrincipal ==1) {
+            $baremeRetrait = $baremeModel->calculerFrais($typeRetraitId, $montantParDestinataire);
+            $fraisRetrait = $baremeRetrait['frais'] ?? 0;
+            $montantATransferer = $montantParDestinataire + $fraisRetrait;
         }
 
-        $numeros = array_column($destinataires, 'numero');
-        if (count($numeros) !== count(array_unique($numeros))) {
-            return redirect()->back()->with('error', 'Vous ne pouvez pas sélectionner deux fois le même destinataire.');
+        $baremeTransfert = $baremeModel->calculerFrais($typeTransfertId, $montantATransferer);
+        if ($baremeTransfert === null) {
+            return redirect()->back()->withInput()->with('error', "Aucun barème de transfert pour le montant destiné à $numero.");
         }
-        $montantDistribue = 0;
-        foreach ($destinataires as $dest) {
-            $montantDistribue += (float) $dest['montant'];
-        }
+        $fraisTransfert = $baremeTransfert['frais'];
 
-        if (abs($montantDistribue - $montantTotal) > 1) {
-            return redirect()->back()->with('error', 'La répartition ne correspond pas au montant total.');
-        }
-
-        $db = db_connect();
-        $db->transStart();
-
-        $typeOperationModel = new ClientOperationModel();
-        $baremeModel = new ClientBaremeModel();
-        $prefixeModel = new ClientPrefixeModel();
-        $commissionModel = new ClientCommissionModel();
-        $transactionModel = new ClientTransactionModel();
-        
-        $typeId = $typeOperationModel->idParCode('transfert');
-
-        $bareme = $baremeModel->calculerFrais($typeId, $montantTotal);
-        if (!$bareme) {
-            $db->transRollback();
-            return redirect()->back()->with('error', 'Aucun barème pour ce montant.');
-        }
-
-        $fraisRetraitTotal = 0;
-        if ($inclureFraisRetrait) {
-            $retraitTypeId = $typeOperationModel->idParCode('retrait');
-            $baremeRetrait = $baremeModel->calculerFrais($retraitTypeId, $montantTotal);
-            if ($baremeRetrait) {
-                $fraisRetraitTotal = $baremeRetrait['frais'];
+        $commission = 0;
+        if ($estPrincipal == 0) {
+          
+            $commissionData = $commissionModel->where('id_prefixe', $prefixe['id'])->first();
+                      
+            if ($commissionData) {
+                $commission = round($montantParDestinataire * $commissionData['pourcentage'] / 100, 2);
             }
         }
-        $commissionTotal = 0;
-        foreach ($destinataires as $dest) {
-            $numero = trim($dest['numero']);
-            $prefixe = substr($numero, 0, 3);
-            $prefixeInfo = $prefixeModel->where('prefixe', $prefixe)->first();
-            
-            if ($prefixeInfo && $prefixeInfo['est_operateur_principal'] == 0) {
-                $commission = $commissionModel->where('id_prefixe', $prefixeInfo['id'])->first();
-                if ($commission) {
-                    $montant = (float) $dest['montant'];
-                    $commissionTotal += ($montant * $commission['pourcentage']) / 100;
-                }
-            }
-        }
 
-        $montantTotalAvecFrais = $montantTotal + $bareme['frais'] + $fraisRetraitTotal + $commissionTotal;
+        $totalPourCeDestinataire = $montantATransferer + $fraisTransfert + $commission;
+        $totalAPrelevier += $totalPourCeDestinataire;
 
-        if ($compteOrigine['solde'] < $montantTotalAvecFrais) {
-            $db->transRollback();
-            return redirect()->back()->with('error', 'Solde insuffisant. Solde : ' . number_format($compteOrigine['solde'], 0, ',', ' ') . ' Ar, besoin : ' . number_format($montantTotalAvecFrais, 0, ',', ' ') . ' Ar');
-        }
-
-    
-        foreach ($destinataires as $destinataire) {
-            $numero = trim($destinataire['numero']);
-            $montant = (float) $destinataire['montant'];
-
-    
-            if ($numero === $compteOrigine['numero_telephone']) {
-                $db->transRollback();
-                return redirect()->back()->with('error', 'Transfert vers soi-même impossible.');
-            }
-
-            if ($montant <= 0) {
-                $db->transRollback();
-                return redirect()->back()->with('error', 'Montant invalide pour un destinataire.');
-            }
-             
-            $prefixe = substr($numero, 0, 3);
-            $prefixeInfo = $prefixeModel->where('prefixe', $prefixe)->first();
-            
-            $commission = 0;
-            if ($prefixeInfo && $prefixeInfo['est_operateur_principal'] == 0) {
-                $commissionData = $commissionModel->where('id_prefixe', $prefixeInfo['id'])->first();
-                if ($commissionData) {
-                    $commission = ($montant * $commissionData['pourcentage']) / 100;
-                }
-            }
-
-            $compteDestinataire = $compteModel->trouverOuCreerCompte($numero);
-
-            $compteModel->update($compteDestinataire['id'], [
-                'solde' => $compteDestinataire['solde'] + $montant
-            ]);
-
-            // Enregistrer la transaction
-            $transactionModel->insert([
-                'compte_id' => $compteOrigine['id'],
-                'type_operation_id' => $typeId,
-                'montant' => $montant,
-                'baremes_frais_id' => $bareme['id'],
-                'solde_apres' => $compteOrigine['solde'] - $montantTotalAvecFrais,
-                'compte_destination_id' => $compteDestinataire['id'],
-                'prefixe_destination_id' => $prefixeInfo ? $prefixeInfo['id'] : null,
-                'inclure_frais_retrait' => $inclureFraisRetrait ? 1 : 0,
-                'commission' => $commission
-            ]);
-        }
-
-
-        $compteModel->update($compteOrigine['id'], [
-            'solde' => $compteOrigine['solde'] - $montantTotalAvecFrais
-        ]);
-
-        $db->transComplete();
-
-        if (!$db->transStatus()) {
-            return redirect()->back()->with('error', 'Le transfert a échoué.');
-        }
-
-        return redirect()->to('/transfert')->with('success', 
-            'Transfert de ' . number_format($montantTotal, 0, ',', ' ') . ' Ar effectué vers ' . count($destinataires) . ' destinataire(s).' .
-            ($fraisRetraitTotal > 0 ? ' Frais retrait: ' . number_format($fraisRetraitTotal, 0, ',', ' ') . ' Ar' : '') .
-            ($commissionTotal > 0 ? ' Commission: ' . number_format($commissionTotal, 0, ',', ' ') . ' Ar' : '')
+        $operations[] = [
+            'numero'                => $numero,
+            'prefixe_id'            => $prefixe['id'],
+            'montant_recu'          => $montantParDestinataire,
+            'montant_a_transferer'  => $montantATransferer,
+            'inclure_frais_retrait' => $inclureFraisRetrait ? 1 : 0,
+            'bareme_transfert_id'   => $baremeTransfert['id'],
+            'frais_transfert'       => $fraisTransfert,
+            'commission'            => $commission,
+        ];
+    }
+    if ($compteOrigine['solde'] < $totalAPrelevier) {
+        return redirect()->back()->withInput()->with(
+            'error',
+            'Solde insuffisant. Solde : ' . number_format($compteOrigine['solde'], 0, ',', ' ') .
+            ' Ar, besoin : ' . number_format($totalAPrelevier, 0, ',', ' ') . ' Ar'
         );
     }
+
+    $db = db_connect();
+    $db->transStart();
+
+    $soldeCourant = $compteOrigine['solde'];
+    $fraisRetraitTotal = 0;
+    $commissionTotal   = 0;
+
+    foreach ($operations as $op) {
+        $compteDestinataire = $compteModel->trouverOuCreerCompte($op['numero']);
+
+        $soldeCourant -= ($op['montant_a_transferer'] + $op['frais_transfert'] + $op['commission']);
+        $compteModel->update($compteOrigine['id'], ['solde' => $soldeCourant]);
+
+        $nouveauSoldeDestinataire = $compteDestinataire['solde'] + $op['montant_recu'];
+        $compteModel->update($compteDestinataire['id'], ['solde' => $nouveauSoldeDestinataire]);
+
+        $transactionModel->insert([
+            'compte_id'              => $compteOrigine['id'],
+            'type_operation_id'      => $typeTransfertId,
+            'montant'                => $op['montant_a_transferer'],
+            'baremes_frais_id'       => $op['bareme_transfert_id'],
+            'compte_destination_id'  => $compteDestinataire['id'],
+            'prefixe_destination_id' => $op['prefixe_id'],
+            'inclure_frais_retrait'  => $op['inclure_frais_retrait'],
+            'commission'             => $op['commission'],
+            'solde_apres'            => $soldeCourant,
+            'date_operation'         => $dateTransfert,
+        ]);
+
+        if ($op['inclure_frais_retrait']) {
+            $fraisRetraitTotal += ($op['montant_a_transferer'] - $op['montant_recu']);
+        }
+        $commissionTotal += $op['commission'];
+    }
+
+    $db->transComplete();
+
+    if (! $db->transStatus()) {
+        return redirect()->back()->with('error', 'Le transfert a échoué.');
+    }
+
+    return redirect()->to('/transfert')->with(
+        'success',
+        'Transfert de ' . number_format($montantTotal, 0, ',', ' ') . ' Ar effectué vers ' . $nombreDestinataires . ' destinataire(s).' .
+        ($fraisRetraitTotal > 0 ? ' Frais retrait inclus : ' . number_format($fraisRetraitTotal, 0, ',', ' ') . ' Ar' : '') .
+        ($commissionTotal > 0 ? ' Commission : ' . number_format($commissionTotal, 0, ',', ' ') . ' Ar' : '')
+    );
+}
+    public function historique()
+{
+    $compteId = session()->get('compte_id');
+    if (!$compteId) {
+        return redirect()->to('/');
+    }
+
+    $transactionModel = new ClientTransactionModel();
+    $historique = $transactionModel->historiquePourCompte($compteId);
+
+    return view('clients/historique', ['historique' => $historique]);
+}
+
     public function detail()
     {
         $compteId = session()->get('compte_id');
@@ -377,16 +391,4 @@ public function retraitStore()
         ]);
     }
 
-    public function historique()
-{
-    $compteId = session()->get('compte_id');
-    if (!$compteId) {
-        return redirect()->to('/');
-    }
-
-    $transactionModel = new ClientTransactionModel();
-    $historique = $transactionModel->historiquePourCompte($compteId);
-
-    return view('clients/historique', ['historique' => $historique]);
-}
 }
