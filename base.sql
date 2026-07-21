@@ -130,7 +130,7 @@ INSERT INTO promotion(pourcentage) VALUES
 (10);   
 -- Préfixes
 INSERT INTO prefixes(prefixe, libelle, est_operateur_principal, actif) VALUES
-('034','Yas',1,1),
+('034','Telma',1,1),
 ('038','Yas',1,1),
 ('033','Orange',0,1),
 ('032','Orange',0,1),
