@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="<?= base_url('style.css') ?>">
 </head>
 <body>
-    <div class="login-card" style="max-width:700px;">
+    <div class="login-card" style="max-width:1000px;">
         <h1>Historique des transactions</h1>
 
         <?php if (empty($historique)): ?>
@@ -24,6 +24,8 @@
                         <th>Montant</th>
                         <th>frais </th>
                         <th>frais retrait</th>
+                        <th>promotion</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -70,6 +72,13 @@
                             <td>
                                 <?php if ($t['frais_retrait']): ?>
                                     <?= esc($t['frais_retrait']) ?>
+                                <?php else: ?>
+                                    0
+                                <?php endif; ?>
+                            </td>
+                                                        <td>
+                                <?php if ($t['promotion']): ?>
+                                    <?= esc($t['promotion']) ?>
                                 <?php else: ?>
                                     0
                                 <?php endif; ?>

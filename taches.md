@@ -1,46 +1,59 @@
-# Systeme operateur : simulation mobile money
+## Installation
 
 composer install
 cp env .env
 sqlite3 writable/mobile_money.db < base.sql
 php spark serve
-## Version 1
+
+## Accès côté client
+
 http://localhost:8080/
-- **Coté client**: Elia (etu003230)
-    - `Page 1: Login`
-        - Login automatique avec le numéro de téléphone
-    - `Page 2: Dépôt`
-        * Formulaire:
-            - Montant (nombre) 
-            - Designation utilisateur/ compte dépôt (v1 pas de connexion user) datalist / recherche par num  => prefix operateur valable a determiner 
-            - Date de dépôt (default now)
-            - Frais de dépôt  => en fonction du montant et de transaction 
-    - `Page 3: Retrait`  
-        * Formulaire: 
-            - Montant (nombre) 
-            - Designation utilisateur/ compte retrait (v1 pas de connexion user) datalist / recherche par num  => prefix operateur valable a determiner 
-            - Date de retrait (default now)
-            - Frais de retrait => en fonction du montant et de transaction
-    - `Page 4: Transfert`  
-        * Formulaire: 
-            - Montant (nombre) 
-            - Designation utilisateur/ compte origine (v1 pas de connexion user) datalist / recherche par num  => prefix operateur valable a determiner 
-            - Designation utilisateur/ compte destinataire (v1 pas de connexion user) datalist / recherche par num  => prefix operateur valable a determiner 
-            - Date de Transfert (default now)
-            - Frais de Transfert => en fonction du montant et de transaction
-    - `Page 5: Detail client`
-        * Fiche Client: 
-            - Nom et Prenom 
-            - Num de tel 
-            - Detail Montant dans le compte principal => somme dépôt, somme retrait, somme transfert, Situation compte
-        * Bouton voir les historiques
-        * Bouton voir le solde =>  Montant dans le compte principal => Situation compte = somme dépôt - somme retrait - somme transfert => dont origine client
-    
-    - `Page 6:Table Historique des transaction`
-        - Date
+
+## Version 1
+
+- **Côté client** : Elia (etu003230)
+
+    - `Page 1 : Login` — route `GET /`, `POST /login` => `Client::form`, `Client::login`
+        - Connexion automatique avec le numéro de téléphone
+        - Vérification du préfixe opérateur avant connexion (`ClientPrefixeModel::estValide`)
+
+    - `Page 2 : Dépôt` — route `GET/POST /depot` => `ClientOperation::depotForm`, `ClientOperation::depotStore`
+        - Formulaire :
+            - Montant (nombre)
+            - Compte concerné : celui du numéro connecté (session)
+            - Date de dépôt (par défaut : maintenant)
+            - Frais de dépôt calculés automatiquement selon le montant  (`ClientBaremeModel::calculerFrais`)
+
+    - `Page 3 : Retrait` — route `GET/POST /retrait` => `ClientOperation::retraitForm`, `ClientOperation::retraitStore`
+        - Formulaire :
+            - Montant (nombre)
+            - Compte concerné : celui du numéro connecté (session)
+            - Date de retrait (par défaut : maintenant)
+            - Frais de retrait calculés automatiquement selon le montant
+            - Vérification du solde suffisant (montant + frais)
+
+    - `Page 4 : Transfert` — route `GET/POST /transfert` => `ClientOperation::transfertForm`, `ClientOperation::transfertStore`
+        - Formulaire :
+            - Montant total à transferer (nombre)
+            - Compte origine : celui du numéro connecté (session)
+            - Un ou plusieurs comptes destinataires, recherche par numéro
+            - Date de transfert (par défaut : maintenant)
+            - Frais de transfert calculés automatiquement selon le montant réparti par destinataire
+
+    - `Page 5 : Détail client / detail` — route `GET /detail` → `ClientOperation::detail`
+        - Fiche client :
+            - Numéro de téléphone
+            - Solde actuel du compte
+        - Lien vers l'historique des transactions
+        - Lien vers les opérations (dépôt, retrait, transfert)
+
+    - `Page 6 : Historique des transactions` — route `GET /historique` → `ClientOperation::historique`
+        - Date de l'opération
         - Type de transaction (dépôt, retrait, transfert)
-        - Compte debite => le compte qui recoit l'argent (optionnel en fonction du type de transaction) 
-        - Compte credite => le compte qui envoi l'argent (optionnel en fonction du type de transaction)
+        - Compte débité (celui qui reçoit l'argent, optionnel selon le type)
+        - Compte crédité (celui qui envoie l'argent, optionnel selon le type)
+
+    - `Déconnexion` — route `GET /logout` → `Client::logout`
 
 
 - **Coté opérateur** : Jemima (etu003370)
@@ -180,3 +193,7 @@ http://localhost:8080/
             * Modèle: `CompteOperatorModel` 
                 - `updateSolde(int $id, float $solde)` → supprimmer existant Coté client
                 - `getSituationCompte()` → liste tous les comptes clients dont le numero correspond a l'operateur principal
+
+Alea 1 misy prom sur frais de transfert:meme operateur ( rehefa manao transfert zany dia mihena 10 % ny bareme de frais de transfert )
+base : config % prom ()
+bonus : page manova config prom

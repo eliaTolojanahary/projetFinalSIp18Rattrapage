@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS baremes_frais;
 DROP TABLE IF EXISTS comptes;
 DROP TABLE IF EXISTS types_operations;
 DROP TABLE IF EXISTS prefixes;
-
+DROP TABLE IF EXISTS promotion;
 -- ============================
 -- TABLE : préfixes
 -- ============================
@@ -29,6 +29,11 @@ CREATE TABLE types_operations (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     code VARCHAR(20) NOT NULL UNIQUE,
     libelle VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE promotion (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pourcentage DECIMAL(15,2) NOT NULL
 );
 
 -- ============================
@@ -98,6 +103,7 @@ CREATE TABLE transactions (
     inclure_frais_retrait INTEGER DEFAULT 0,
 
     commission DECIMAL(15,2),
+    promotion DECIMAL(15,2),
     frais_retrait DECIMAL(15,2),
     FOREIGN KEY(compte_id)
         REFERENCES comptes(id),
@@ -118,7 +124,10 @@ CREATE TABLE transactions (
 -- ============================
 -- DONNÉES DE TEST
 -- ============================
+--prom
 
+INSERT INTO promotion(pourcentage) VALUES
+(10);   
 -- Préfixes
 INSERT INTO prefixes(prefixe, libelle, est_operateur_principal, actif) VALUES
 ('034','Yas',1,1),

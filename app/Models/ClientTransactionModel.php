@@ -22,7 +22,8 @@ class ClientTransactionModel extends Model
         'commission',
         'inclure_frais_retrait',
         'prefixe_destination_id',
-        'frais_retrait'
+        'frais_retrait',
+        'promotion'
     ];
 
 
@@ -34,6 +35,7 @@ class ClientTransactionModel extends Model
             transactions.montant AS montant,
             transactions.commission AS commission,
             transactions.inclure_frais_retrait,
+             transactions.promotion as promotion,
             transactions.frais_retrait as frais_retrait,
             baremes_frais.frais AS montant_frais,
             types_operations.code AS type_code,
