@@ -18,12 +18,24 @@ class ClientPrefixeModel extends Model
                      ->where('actif', 1)
                      ->first() !== null;
     }
-   public function trouverPrefixe(string $numero): ?array
-{
-    $prefixe = substr($numero, 0, 3);
 
-    return $this->where('prefixe', $prefixe)
-                ->where('actif', 1)
-                ->first();
-}
+    public function trouverPrefixe(string $numero): ?array
+    {
+        $prefixe = substr($numero, 0, 3);
+
+        return $this->where('prefixe', $prefixe)
+                    ->where('actif', 1)
+                    ->first();
+    }
+
+    public function estPrincipal(string $numero): bool
+    {
+        $prefixe = substr($numero, 0, 3);
+
+        $result = $this->select('est_operateur_principal')
+                    ->where('prefixe', $prefixe)
+                    ->first();
+
+        return (bool) ($result['est_operateur_principal'] ?? false);
+    }
 }
