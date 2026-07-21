@@ -180,3 +180,4 @@ http://localhost:8080/
             * Modèle: `CompteOperatorModel` 
                 - `updateSolde(int $id, float $solde)` → supprimmer existant Coté client
                 - `getSituationCompte()` → liste tous les comptes clients dont le numero correspond a l'operateur principal
+                - `countAllClients()` -> seul les client de l'operateur principal
