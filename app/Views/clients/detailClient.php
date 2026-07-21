@@ -60,6 +60,24 @@
             </table>
         </div>
 
+        <div style="margin-top:24px;">
+            <h2 style="color:#1e3c72; font-size:16px; margin-bottom:12px;">Compte Épargne</h2>
+            <table>
+                <tr>
+                    <th>Solde Épargne</th>
+                    <td style="color:#1e3c72; font-weight:700;">
+                        <?= esc(number_format($soldeEpargne, 2, ',', ' ')) ?> Ar
+                    </td>
+                </tr>
+                <tr>
+                    <th>Pourcentage Épargne</th>
+                    <td style="font-weight:700;">
+                        <?= esc(number_format($compte['pourcentage_epargne'], 0, ',', ' ')) ?> %
+                    </td>
+                </tr>
+            </table>
+        </div>
+
         <div style="margin-top:24px; text-align:center;">
             <a href="<?= base_url('historique') ?>" style="display:inline-block; padding:12px 24px; background:#2a5298; color:#fff; border-radius:8px; text-decoration:none; font-weight:600; margin-right:8px;">
                 Voir les historiques
@@ -76,6 +94,13 @@
             </p>
             <p style="color:#666; font-size:13px; margin-top:4px;">
                 Situation compte = <?= esc(number_format($situationCompte, 2, ',', ' ')) ?> Ar (dont origine client)
+            </p>
+            <p style="color:#1e3c72; font-size:14px; margin-top:12px; margin-bottom:4px;">Montant dans le compte épargne</p>
+            <p style="color:#1e3c72; font-size:28px; font-weight:700;">
+                <?= esc(number_format($soldeEpargne, 2, ',', ' ')) ?> Ar
+            </p>
+            <p style="color:#666; font-size:13px; margin-top:4px;">
+                Pourcentage épargne = <?= esc(number_format($compte['pourcentage_epargne'], 0, ',', ' ')) ?> %
             </p>
         </div>
     </div>

@@ -9,8 +9,8 @@ use App\Models\ClientBaremeModel;
 use App\Models\ClientTransactionModel;
 use App\Models\ClientCommissionModel;
 use App\Models\ClientPromotion;
+use App\Models\ClientEpargneModel;
 
-use App\Models\ClientPromotion;
 
 
 class ClientOperation extends BaseController
@@ -46,8 +46,13 @@ class ClientOperation extends BaseController
         $compteId = session()->get('compte_id');
         $compteModel = new ClientModel();
         $compte = $compteModel->find($compteId);
+
+        $epargneModel = new ClientEpargneModel();
+        $epargne = $epargneModel->creerSiInexistant($compteId);
+
         return view('clients/epargne', [
             'compte'        => $compte,
+            'soldeEpargne'  => $epargne['solde'],
         ]);
     }
     public function depotForm()
@@ -306,7 +311,6 @@ public function transfertStore()
         $fraisRetrait = 0;
         $montantATransferer = $montantParDestinataire;
         $promotion=0;
-        $promotion=0;
         if ($inclureFraisRetrait && $estPrincipal ==1) {
             $prom=new ClientPromotion();
             $promPourcent=$prom->findAll();
@@ -367,8 +371,8 @@ public function transfertStore()
             'inclure_frais_retrait' => $inclureFraisRetrait ? 1 : 0,
             'bareme_transfert_id'   => $baremeTransfert['id'],
             'frais_transfert'       => $fraisTransfert,
-            'commission'            => $commission
-            'commission'            => $commission
+            'commission'            => $commission,
+            'promotion'            => $promotion
         ];
     }
     if ($compteOrigine['solde'] < $totalAPrelevier) {
@@ -385,7 +389,8 @@ public function transfertStore()
     $soldeCourant = $compteOrigine['solde'];
     $fraisRetraitTotal = 0;
     $commissionTotal   = 0;
-    $epargne = 0;
+    $montantEpargneTotal = 0;
+    $epargneModel = new ClientEpargneModel();
 
     foreach ($operations as $op) {
         $compteDestinataire = $compteModel->trouverOuCreerCompte($op['numero']);
@@ -393,10 +398,17 @@ public function transfertStore()
         $soldeCourant -= ($op['montant_a_transferer'] + $op['frais_transfert'] + $op['commission']);
         $compteModel->update($compteOrigine['id'], ['solde' => $soldeCourant]);
 
-        $nouveauSoldeDestinataire = $compteDestinataire['solde'] + $op['montant_recu'];
+        $pourcentageEpargne = (float) $compteDestinataire['pourcentage_epargne'];
+        $montantEpargne = round($op['montant_recu'] * $pourcentageEpargne / 100, 2);
+        $montantPrincipal = $op['montant_recu'] - $montantEpargne;
+
+        $nouveauSoldeDestinataire = $compteDestinataire['solde'] + $montantPrincipal;
         $compteModel->update($compteDestinataire['id'], ['solde' => $nouveauSoldeDestinataire]);
-        $epargne = soldeCourant  * (1 - ( $compteDestinataire['pourcentage_epargne'] / 100));
-          
+
+        if ($montantEpargne > 0) {
+            $epargneModel->crediter($compteDestinataire['id'], $montantEpargne);
+        }
+
         $transactionModel->insert([
             'compte_id'              => $compteOrigine['id'],
             'type_operation_id'      => $typeTransfertId,
@@ -408,15 +420,16 @@ public function transfertStore()
             'commission'             => $op['commission'],
             'solde_apres'            => $soldeCourant,
             'date_operation'         => $dateTransfert,
-            'frais_retrait'         => $fraisRetrait,
-            'promotion'                => $promotion,
-            'epargnes'  => $epargne,
+            'frais_retrait'          => $op['frais_transfert'],
+            'promotion'              => $op['promotion'],
+            'epargnes'               => $montantEpargne,
         ]);
 
         if ($op['inclure_frais_retrait']) {
             $fraisRetraitTotal += ($op['montant_a_transferer'] - $op['montant_recu']);
         }
         $commissionTotal += $op['commission'];
+        $montantEpargneTotal += $montantEpargne;
     }
 
     $db->transComplete();
@@ -429,7 +442,8 @@ public function transfertStore()
         'success',
         'Transfert de ' . number_format($montantTotal, 0, ',', ' ') . ' Ar effectué vers ' . $nombreDestinataires . ' destinataire(s).' .
         ($fraisRetraitTotal > 0 ? ' Frais retrait inclus : ' . number_format($fraisRetraitTotal, 0, ',', ' ') . ' Ar' : '') .
-        ($commissionTotal > 0 ? ' Commission : ' . number_format($commissionTotal, 0, ',', ' ') . ' Ar' : '')
+        ($commissionTotal > 0 ? ' Commission : ' . number_format($commissionTotal, 0, ',', ' ') . ' Ar' : '') .
+        ($montantEpargneTotal > 0 ? ' Épargne : ' . number_format($montantEpargneTotal, 0, ',', ' ') . ' Ar' : '')
     );
 }
     public function historique()
@@ -468,12 +482,16 @@ public function transfertStore()
 
         $situationCompte = $totalDepots - $totalRetraits - $totalTransferts;
 
+        $epargneModel = new ClientEpargneModel();
+        $epargne = $epargneModel->creerSiInexistant($compteId);
+
         return view('clients/detailClient', [
             'compte'           => $compte,
             'totalDepots'      => $totalDepots,
             'totalRetraits'    => $totalRetraits,
             'totalTransferts'  => $totalTransferts,
             'situationCompte'  => $situationCompte,
+            'soldeEpargne'     => $epargne['solde'],
         ]);
     }
 

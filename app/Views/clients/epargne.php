@@ -7,9 +7,13 @@
 </head>
 <body>
     <div class="login-card">
-        <h1>Transfert d'argent</h1>
-        <p class="subtitle">Depuis : <?= esc($compte['numero_telephone']) ?></p>
-        <p class="subtitle">Solde : <?= number_format($compte['solde'], 0, ',', ' ') ?> Ar</p>
+        <h1>Configuration Épargne</h1>
+        <?php include APPPATH . 'Views/clients/layoutClient.php'; ?>
+
+        <p class="subtitle">Compte : <?= esc($compte['numero_telephone']) ?></p>
+        <p class="subtitle">Solde principal : <?= number_format($compte['solde'], 0, ',', ' ') ?> Ar</p>
+        <p class="subtitle">Solde épargne : <?= number_format($soldeEpargne, 0, ',', ' ') ?> Ar</p>
+        <p class="subtitle">Pourcentage actuel : <?= number_format($compte['pourcentage_epargne'], 0, ',', ' ') ?> %</p>
 
         <?php if (session('error')): ?>
             <div class="alert"><?= esc(session('error')) ?></div>
@@ -21,8 +25,9 @@
         <form method="post" action="/epargne">
             <?= csrf_field() ?>
 
-            <label>Pourcentage Epargne</label>
-            <input type="number" name="pourcentage" id="pourcentage" min="0" max="100" required>
+            <label>Pourcentage Épargne (0 - 100 %)</label>
+            <input type="number" name="pourcentage" id="pourcentage" min="0" max="100" required
+                   value="<?= esc($compte['pourcentage_epargne']) ?>">
 
             <button type="submit">Confirmer le Pourcentage épargné</button>
         </form>

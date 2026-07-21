@@ -37,6 +37,9 @@ class ClientModel extends Model
             'solde'            => 0,
         ]);
 
+        $epargneModel = new \App\Models\ClientEpargneModel();
+        $epargneModel->creerSiInexistant($id);
+
         return $this->find($id);
     }
     public function rechercher(string $terme): array
