@@ -166,34 +166,47 @@ public function retraitStore()
 
     return redirect()->to('/retrait')->with('success', 'Retrait de ' . $montant . ' Ar effectué.');
 }
- public function transfertForm()
-    {
-        $compteId = session()->get('compte_id');
-        $compteModel = new ClientModel();
-        $compte = $compteModel->find($compteId);
+public function transfertForm()
+{
+    $compteId = session()->get('compte_id');
+    $compteModel = new ClientModel();
+    $compte = $compteModel->find($compteId);
 
-        $prefixeModel = new ClientPrefixeModel();
-        $commissionModel = new ClientCommissionModel();
-        
-        $prefixes = $prefixeModel->findAll();
-        $prefixesInfos = [];
-        
-        foreach ($prefixes as $prefixe) {
-            $commission = $commissionModel->where('id_prefixe', $prefixe['id'])->first();
-            $prefixesInfos[$prefixe['prefixe']] = [
-                'id' => $prefixe['id'],
-                'libelle' => $prefixe['libelle'],
-                'est_operateur_principal' => $prefixe['est_operateur_principal'],
-                'commission' => $commission ? $commission['pourcentage'] : 0
-            ];
-        }
+    $prefixeModel    = new ClientPrefixeModel();
+    $commissionModel = new ClientCommissionModel();
 
-        return view('clients/transfert', [
-            'compte'        => $compte,
-            'comptes'       => $compteModel->findAll(),
-            'prefixesInfos' => $prefixesInfos,
-        ]);
+    $prefixes = $prefixeModel->findAll();
+    $prefixesInfos = [];
+
+    foreach ($prefixes as $prefixe) {
+        $commission = $commissionModel->where('id_prefixe', $prefixe['id'])->first();
+        $prefixesInfos[$prefixe['prefixe']] = [
+            'id'                      => $prefixe['id'],
+            'libelle'                 => $prefixe['libelle'],
+            'est_operateur_principal' => $prefixe['est_operateur_principal'],
+            'commission'              => $commission ? $commission['pourcentage'] : 0,
+        ];
     }
+
+    $prefixeConnecte = $prefixeModel->trouverPrefixe($compte['numero_telephone']);
+    $libelleOperateurConnecte = $prefixeConnecte['libelle'] ?? null;
+    $tousLesComptes = $compteModel->findAll();
+    $comptes = array_filter($tousLesComptes, function ($c) use ($prefixeModel, $libelleOperateurConnecte, $compte) {
+        if ($c['numero_telephone'] === $compte['numero_telephone']) {
+            return false; 
+        }
+       
+        $prefixeCompte = $prefixeModel->trouverPrefixe($c['numero_telephone']);
+      
+        return $prefixeCompte !== null && $prefixeCompte['libelle'] === $libelleOperateurConnecte;
+    });
+   
+    return view('clients/transfert', [
+        'compte'        => $compte,
+        'comptes'       => array_values($comptes), 
+        'prefixesInfos' => $prefixesInfos,
+    ]);
+}
 public function transfertStore()
 {
     $compteId              = session()->get('compte_id');
@@ -325,6 +338,7 @@ public function transfertStore()
             'commission'             => $op['commission'],
             'solde_apres'            => $soldeCourant,
             'date_operation'         => $dateTransfert,
+            'frais_retrait'         => $fraisRetrait,
         ]);
 
         if ($op['inclure_frais_retrait']) {

@@ -98,6 +98,7 @@ CREATE TABLE transactions (
     inclure_frais_retrait INTEGER DEFAULT 0,
 
     commission DECIMAL(15,2),
+    frais_retrait DECIMAL(15,2),
     FOREIGN KEY(compte_id)
         REFERENCES comptes(id),
 
@@ -120,7 +121,7 @@ CREATE TABLE transactions (
 
 -- Préfixes
 INSERT INTO prefixes(prefixe, libelle, est_operateur_principal, actif) VALUES
-('034','Telma',1,1),
+('034','Yas',1,1),
 ('038','Yas',1,1),
 ('033','Orange',0,1),
 ('032','Orange',0,1),

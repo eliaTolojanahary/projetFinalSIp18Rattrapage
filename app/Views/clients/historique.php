@@ -17,11 +17,13 @@
                     <tr>
                         <th>Date</th>
                         <th>Type</th>
-                        <th>Compte destinataire</th>
+                      
                         <th>Compte expediteur</th>
+                          <th>Compte destinataire</th>
                         <th>Commission</th>
                         <th>Montant</th>
-                        <th>frais</th>
+                        <th>frais </th>
+                        <th>frais retrait</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,6 +31,13 @@
                         <tr>
                             <td><?= esc(date('d/m/Y H:i', strtotime($t['date_operation']))) ?></td>
                             <td><?= esc($t['type_libelle']) ?></td>
+                             <td>
+                                <?php if ($t['type_code'] === 'retrait'): ?>
+                                    —
+                                <?php else: ?>
+                                    <?= esc($t['compte_emetteur']) ?>
+                                <?php endif; ?>
+                            </td>
                             <td>
                                 <?php if ($t['type_code'] === 'depot'): ?>
                                     —
@@ -36,13 +45,7 @@
                                     <?= esc($t['compte_destinataire'] ?? $t['compte_emetteur']) ?>
                                 <?php endif; ?>
                             </td>
-                            <td>
-                                <?php if ($t['type_code'] === 'retrait'): ?>
-                                    —
-                                <?php else: ?>
-                                    <?= esc($t['compte_emetteur']) ?>
-                                <?php endif; ?>
-                            </td>
+                           
                             <td>
                                 <?php if ($t['commission']): ?>
                                     <?= esc($t['commission']) ?>
@@ -60,6 +63,13 @@
                              <td>
                                 <?php if ($t['montant_frais']): ?>
                                     <?= esc($t['montant_frais']) ?>
+                                <?php else: ?>
+                                    0
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if ($t['frais_retrait']): ?>
+                                    <?= esc($t['frais_retrait']) ?>
                                 <?php else: ?>
                                     0
                                 <?php endif; ?>
