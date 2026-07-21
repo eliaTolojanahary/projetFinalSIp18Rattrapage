@@ -43,4 +43,16 @@ class ClientTransactionModel extends Model
         ->orderBy('transactions.date_operation', 'DESC')
         ->findAll();
 }
+
+    public function situationParCompte(int $compteId): array
+    {
+        return $this->select('
+                COALESCE(SUM(CASE WHEN transactions.type_operation_id = 1 THEN transactions.montant ELSE 0 END), 0) AS total_depots,
+                COALESCE(SUM(CASE WHEN transactions.type_operation_id = 2 THEN transactions.montant ELSE 0 END), 0) AS total_retraits,
+                COALESCE(SUM(CASE WHEN transactions.type_operation_id = 3 THEN transactions.montant ELSE 0 END), 0) AS total_transferts
+            ')
+            ->where('transactions.compte_id', $compteId)
+            ->orWhere('transactions.compte_destination_id', $compteId)
+            ->first();
+    }
 }

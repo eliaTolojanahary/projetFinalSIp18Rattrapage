@@ -345,6 +345,38 @@ public function retraitStore()
             ($commissionTotal > 0 ? ' Commission: ' . number_format($commissionTotal, 0, ',', ' ') . ' Ar' : '')
         );
     }
+    public function detail()
+    {
+        $compteId = session()->get('compte_id');
+        if (!$compteId) {
+            return redirect()->to('/');
+        }
+
+        $compteModel = new ClientModel();
+        $compte = $compteModel->find($compteId);
+
+        if (!$compte) {
+            return redirect()->to('/')->with('error', 'Compte introuvable.');
+        }
+
+        $transactionModel = new ClientTransactionModel();
+        $situation = $transactionModel->situationParCompte($compteId);
+
+        $totalDepots    = (float) ($situation['total_depots'] ?? 0);
+        $totalRetraits  = (float) ($situation['total_retraits'] ?? 0);
+        $totalTransferts = (float) ($situation['total_transferts'] ?? 0);
+
+        $situationCompte = $totalDepots - $totalRetraits - $totalTransferts;
+
+        return view('clients/detailClient', [
+            'compte'           => $compte,
+            'totalDepots'      => $totalDepots,
+            'totalRetraits'    => $totalRetraits,
+            'totalTransferts'  => $totalTransferts,
+            'situationCompte'  => $situationCompte,
+        ]);
+    }
+
     public function historique()
 {
     $compteId = session()->get('compte_id');

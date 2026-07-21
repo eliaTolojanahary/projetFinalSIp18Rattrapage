@@ -16,6 +16,12 @@ $routes->get('frais', 'ClientOperation::calculerFraisAjax');
 $routes->get('transfert', 'ClientOperation::transfertForm');
 $routes->post('transfert', 'ClientOperation::transfertStore');
 $routes->get('historique', 'ClientOperation::historique');
+$routes->get('detail', 'ClientOperation::detail');
+
+$routes->get('operator/login', 'OperatorLogin::form');
+$routes->post('operator/login', 'OperatorLogin::login');
+$routes->get('operator/logout', 'OperatorLogin::logout');
+
 $routes->get('operator/dahsboard', 'DashboardOperator::index');
 
 $routes->get('operator/clients', 'ClientsOperator::index');

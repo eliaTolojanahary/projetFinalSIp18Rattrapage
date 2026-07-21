@@ -3,6 +3,6 @@
     <a href="<?= base_url('retrait') ?>">Retrait</a> |
     <a href="<?= base_url('transfert') ?>">Transfert</a> |
     <a href="<?= base_url('historique') ?>">Historique</a> |
-    <a href="<?= base_url('dashboard') ?>">Détail compte</a> |
+    <a href="<?= base_url('detail') ?>">Détail compte</a> |
      <a href="<?= base_url('logout') ?>">Déconnexion</a>
 </nav>

@@ -6,8 +6,19 @@ use App\Models\ConfigurationOperatorModel;
 
 class ConfigurationOperator extends BaseController
 {
+    private function checkAuth()
+    {
+        if (!session()->get('operator_logged_in')) {
+            return redirect()->to('/operator/login');
+        }
+        return null;
+    }
+
     public function index()
     {
+        $redirect = $this->checkAuth();
+        if ($redirect) return $redirect;
+
         $model = new ConfigurationOperatorModel();
 
         $data = [
@@ -22,6 +33,9 @@ class ConfigurationOperator extends BaseController
     // --- Prefixes ---
     public function storePrefix()
     {
+        $redirect = $this->checkAuth();
+        if ($redirect) return $redirect;
+
         $model = new ConfigurationOperatorModel();
         $prefixe = trim($this->request->getPost('prefixe'));
         $libelle = trim($this->request->getPost('libelle'));
@@ -42,6 +56,9 @@ class ConfigurationOperator extends BaseController
 
     public function deletePrefix(int $id)
     {
+        $redirect = $this->checkAuth();
+        if ($redirect) return $redirect;
+
         $model = new ConfigurationOperatorModel();
         $model->deletePrefix($id);
 
@@ -50,6 +67,9 @@ class ConfigurationOperator extends BaseController
 
     public function togglePrefix(int $id)
     {
+        $redirect = $this->checkAuth();
+        if ($redirect) return $redirect;
+
         $model = new ConfigurationOperatorModel();
         $model->togglePrefix($id);
 
@@ -58,6 +78,9 @@ class ConfigurationOperator extends BaseController
 
     public function togglePrincipal(int $id)
     {
+        $redirect = $this->checkAuth();
+        if ($redirect) return $redirect;
+
         $model = new ConfigurationOperatorModel();
         $model->togglePrincipal($id);
 
@@ -67,6 +90,9 @@ class ConfigurationOperator extends BaseController
     // --- Barèmes ---
     public function storeBareme()
     {
+        $redirect = $this->checkAuth();
+        if ($redirect) return $redirect;
+
         $model = new ConfigurationOperatorModel();
 
         $type_operation_id = (int) $this->request->getPost('type_operation_id');
@@ -90,6 +116,9 @@ class ConfigurationOperator extends BaseController
 
     public function deleteBareme(int $id)
     {
+        $redirect = $this->checkAuth();
+        if ($redirect) return $redirect;
+
         $model = new ConfigurationOperatorModel();
         $model->deleteBareme($id);
 
