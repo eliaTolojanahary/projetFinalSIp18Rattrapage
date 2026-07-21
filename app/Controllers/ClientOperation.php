@@ -10,6 +10,8 @@ use App\Models\ClientTransactionModel;
 use App\Models\ClientCommissionModel;
 use App\Models\ClientPromotion;
 
+use App\Models\ClientPromotion;
+
 
 class ClientOperation extends BaseController
 {
@@ -304,12 +306,26 @@ public function transfertStore()
         $fraisRetrait = 0;
         $montantATransferer = $montantParDestinataire;
         $promotion=0;
+        $promotion=0;
         if ($inclureFraisRetrait && $estPrincipal ==1) {
+            $prom=new ClientPromotion();
+            $promPourcent=$prom->findAll();
+
             $prom=new ClientPromotion();
             $promPourcent=$prom->findAll();
 
             $baremeRetrait = $baremeModel->calculerFrais($typeRetraitId, $montantParDestinataire);
             $fraisRetrait = $baremeRetrait['frais'] ?? 0;
+             $promotion=($fraisRetrait * $promPourcent[0]['pourcentage']/100);
+             
+            if($fraisRetrait!=0){
+                $fraisRetrait=$fraisRetrait- $promotion;
+                
+            }else{
+                $fraisRetrait=0;
+            }
+           
+            
              $promotion=($fraisRetrait * $promPourcent[0]['pourcentage']/100);
              
             if($fraisRetrait!=0){
@@ -342,6 +358,7 @@ public function transfertStore()
         $totalPourCeDestinataire = $montantATransferer + $fraisTransfert + $commission;
         $totalAPrelevier += $totalPourCeDestinataire;
    
+   
         $operations[] = [
             'numero'                => $numero,
             'prefixe_id'            => $prefixe['id'],
@@ -350,6 +367,7 @@ public function transfertStore()
             'inclure_frais_retrait' => $inclureFraisRetrait ? 1 : 0,
             'bareme_transfert_id'   => $baremeTransfert['id'],
             'frais_transfert'       => $fraisTransfert,
+            'commission'            => $commission
             'commission'            => $commission
         ];
     }

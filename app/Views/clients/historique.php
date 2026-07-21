@@ -7,6 +7,7 @@
 </head>
 <body>
     <div class="login-card" style="max-width:1000px;">
+    <div class="login-card" style="max-width:1000px;">
         <h1>Historique des transactions</h1>
 
         <?php if (empty($historique)): ?>

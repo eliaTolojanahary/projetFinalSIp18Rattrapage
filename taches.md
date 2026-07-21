@@ -1,9 +1,13 @@
 ## Installation
+## Installation
 
 composer install
 cp env .env
 sqlite3 writable/mobile_money.db < base.sql
 php spark serve
+
+## Accès côté client
+
 
 ## Accès côté client
 
@@ -49,7 +53,52 @@ http://localhost:8080/
 
     - `Page 6 : Historique des transactions` — route `GET /historique` → `ClientOperation::historique`
         - Date de l'opération
+
+## Version 1
+
+- **Côté client** : Elia (etu003230)
+
+    - `Page 1 : Login` — route `GET /`, `POST /login` => `Client::form`, `Client::login`
+        - Connexion automatique avec le numéro de téléphone
+        - Vérification du préfixe opérateur avant connexion (`ClientPrefixeModel::estValide`)
+
+    - `Page 2 : Dépôt` — route `GET/POST /depot` => `ClientOperation::depotForm`, `ClientOperation::depotStore`
+        - Formulaire :
+            - Montant (nombre)
+            - Compte concerné : celui du numéro connecté (session)
+            - Date de dépôt (par défaut : maintenant)
+            - Frais de dépôt calculés automatiquement selon le montant  (`ClientBaremeModel::calculerFrais`)
+
+    - `Page 3 : Retrait` — route `GET/POST /retrait` => `ClientOperation::retraitForm`, `ClientOperation::retraitStore`
+        - Formulaire :
+            - Montant (nombre)
+            - Compte concerné : celui du numéro connecté (session)
+            - Date de retrait (par défaut : maintenant)
+            - Frais de retrait calculés automatiquement selon le montant
+            - Vérification du solde suffisant (montant + frais)
+
+    - `Page 4 : Transfert` — route `GET/POST /transfert` => `ClientOperation::transfertForm`, `ClientOperation::transfertStore`
+        - Formulaire :
+            - Montant total à transferer (nombre)
+            - Compte origine : celui du numéro connecté (session)
+            - Un ou plusieurs comptes destinataires, recherche par numéro
+            - Date de transfert (par défaut : maintenant)
+            - Frais de transfert calculés automatiquement selon le montant réparti par destinataire
+
+    - `Page 5 : Détail client / detail` — route `GET /detail` → `ClientOperation::detail`
+        - Fiche client :
+            - Numéro de téléphone
+            - Solde actuel du compte
+        - Lien vers l'historique des transactions
+        - Lien vers les opérations (dépôt, retrait, transfert)
+
+    - `Page 6 : Historique des transactions` — route `GET /historique` → `ClientOperation::historique`
+        - Date de l'opération
         - Type de transaction (dépôt, retrait, transfert)
+        - Compte débité (celui qui reçoit l'argent, optionnel selon le type)
+        - Compte crédité (celui qui envoie l'argent, optionnel selon le type)
+
+    - `Déconnexion` — route `GET /logout` → `Client::logout`
         - Compte débité (celui qui reçoit l'argent, optionnel selon le type)
         - Compte crédité (celui qui envoie l'argent, optionnel selon le type)
 
