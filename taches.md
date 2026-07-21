@@ -153,3 +153,20 @@ http://localhost:8080/
             - Toggle actif/inactif
             - Suppression
             - API: `GET /api/prefixes` → préfixes actifs en JSON (pour datalist côté client)
+
+## Fix error main : 
+- **Coté client**: Jemima (etu003370)
+    - `Page 5: Detail client` - inexistant a faire
+        * Fiche Client: 
+            - Nom et Prenom 
+            - Num de tel 
+            - Detail Montant dans le compte principal => somme dépôt, somme retrait, somme transfert, Situation compte
+        * Bouton voir les historiques
+        * Bouton voir le solde =>  Montant dans le compte principal => Situation compte = somme dépôt - somme retrait - somme transfert => dont origine client
+    - route /detail 
+
+- **Coté opérateur** : Jemima (etu003370) 
+    - `Page 6: login unique operateur`
+        - login admin/admin (ecrit en dur sur le form)
+        + crsf_field()
+        - redirect in dashboardOperator url: /operator form /

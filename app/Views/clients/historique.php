@@ -17,8 +17,11 @@
                     <tr>
                         <th>Date</th>
                         <th>Type</th>
-                        <th>Compte débité</th>
-                        <th>Compte crédité</th>
+                        <th>Compte destinataire</th>
+                        <th>Compte expediteur</th>
+                        <th>Commission</th>
+                        <th>Montant</th>
+                        <th>frais</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,6 +41,27 @@
                                     —
                                 <?php else: ?>
                                     <?= esc($t['compte_emetteur']) ?>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if ($t['commission']): ?>
+                                    <?= esc($t['commission']) ?>
+                                <?php else: ?>
+                                    0
+                                <?php endif; ?>
+                            </td>
+                             <td>
+                                <?php if ($t['montant']): ?>
+                                    <?= esc($t['montant']) ?>
+                                <?php else: ?>
+                                    0
+                                <?php endif; ?>
+                            </td>
+                             <td>
+                                <?php if ($t['montant_frais']): ?>
+                                    <?= esc($t['montant_frais']) ?>
+                                <?php else: ?>
+                                    0
                                 <?php endif; ?>
                             </td>
                         </tr>

@@ -145,9 +145,12 @@
 <body>
     <nav class="nav">
         <div class="brand">Mobile Money</div>
-        <a href="<?= site_url('/operator/dahsboard') ?>">Dashboard</a>
-        <a href="<?= site_url('/operator/clients') ?>">Clients</a>
-        <a href="<?= site_url('/operator/configuration') ?>">Configuration</a>
+        <?php if (session()->get('operator_logged_in')): ?>
+            <a href="<?= site_url('/operator/dahsboard') ?>">Dashboard</a>
+            <a href="<?= site_url('/operator/clients') ?>">Clients</a>
+            <a href="<?= site_url('/operator/configuration') ?>">Configuration</a>
+            <a href="<?= site_url('/operator/logout') ?>">Déconnexion</a>
+        <?php endif; ?>
     </nav>
 
     <main class="container">

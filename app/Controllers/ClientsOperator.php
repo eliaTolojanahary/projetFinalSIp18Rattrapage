@@ -7,8 +7,19 @@ use CodeIgniter\Exceptions\PageNotFoundException;
 
 class ClientsOperator extends BaseController
 {
+    private function checkAuth()
+    {
+        if (!session()->get('operator_logged_in')) {
+            return redirect()->to('/operator/login');
+        }
+        return null;
+    }
+
     public function index()
     {
+        $redirect = $this->checkAuth();
+        if ($redirect) return $redirect;
+
         $compteModel = new CompteOperatorModel();
         $clients = $compteModel->getSituationCompte();
 
@@ -19,6 +30,9 @@ class ClientsOperator extends BaseController
 
     public function show(int $id)
     {
+        $redirect = $this->checkAuth();
+        if ($redirect) return $redirect;
+
         $compteModel = new CompteOperatorModel();
         $client = $compteModel->getSituationCompteParIdWithTransactions($id);
 
