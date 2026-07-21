@@ -38,11 +38,6 @@ CREATE TABLE promotion (
     pourcentage DECIMAL(15,2) NOT NULL
 );
 
-CREATE TABLE promotion (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    pourcentage DECIMAL(15,2) NOT NULL
-);
-
 -- ============================
 -- TABLE : comptes
 -- ============================
@@ -118,7 +113,6 @@ CREATE TABLE transactions (
     inclure_frais_retrait INTEGER DEFAULT 0,
 
     commission DECIMAL(15,2),
-    promotion DECIMAL(15,2),
     promotion DECIMAL(15,2),
     frais_retrait DECIMAL(15,2),
     epargnes DECIMAL(15,2),
