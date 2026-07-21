@@ -1,24 +1,13 @@
 <?php
 
-namespace App\Database\Seeds;
+namespace App\Database\Migrations;
 
-use CodeIgniter\Database\Seeder;
+use CodeIgniter\Database\Migration;
 
-class DataSeeder extends Seeder
+class SeedAllData extends Migration
 {
-    public function run()
+    public function up()
     {
-        $this->db->table('transactions')->truncate();
-        $this->db->table('baremes_frais')->truncate();
-        $this->db->table('commission')->truncate();
-        $this->db->table('comptes')->truncate();
-        $this->db->table('types_operations')->truncate();
-        $this->db->table('prefixes')->truncate();
-
-        if ($this->db->DBDriver === 'SQLite3') {
-            $this->db->query("DELETE FROM sqlite_sequence");
-        }
-
         $this->db->table('prefixes')->insertBatch([
             ['prefixe' => '034', 'libelle' => 'Telma',  'actif' => 1, 'est_operateur_principal' => 1],
             ['prefixe' => '038', 'libelle' => 'Yas',    'actif' => 1, 'est_operateur_principal' => 1],
@@ -104,5 +93,15 @@ class DataSeeder extends Seeder
                 'inclure_frais_retrait'    => 1,
             ],
         ]);
+    }
+
+    public function down()
+    {
+        $this->db->table('transactions')->delete();
+        $this->db->table('comptes')->delete();
+        $this->db->table('commission')->delete();
+        $this->db->table('baremes_frais')->delete();
+        $this->db->table('types_operations')->delete();
+        $this->db->table('prefixes')->delete();
     }
 }
