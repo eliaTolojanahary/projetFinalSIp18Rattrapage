@@ -197,3 +197,9 @@ http://localhost:8080/
 Alea 1 misy prom sur frais de transfert:meme operateur ( rehefa manao transfert zany dia mihena 10 % ny bareme de frais de transfert )
 base : config % prom ()
 bonus : page manova config prom
+
+Alea 2 : epargne 
+Client miteny epargne % 
+ex : epargne 50% :  50 pourcent vers solde principal / 50 pourcent vers solde epargne 
+1 client - 1 epargne 
+Sur les transfert uniquement    

@@ -42,7 +42,7 @@ class CompteOperatorModel extends Model
 
     public function countAllClients(): int
     {
-        return $this->countAllResults();
+        return count($this->getSituationCompte());
     }
 
     public function totalMontantDetenu(): float

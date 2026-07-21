@@ -9,7 +9,7 @@ class SeedAllData extends Migration
     public function up()
     {
         $this->db->table('prefixes')->insertBatch([
-            ['prefixe' => '034', 'libelle' => 'Telma',  'actif' => 1, 'est_operateur_principal' => 1],
+            ['prefixe' => '034', 'libelle' => 'Yas',  'actif' => 1, 'est_operateur_principal' => 1],
             ['prefixe' => '038', 'libelle' => 'Yas',    'actif' => 1, 'est_operateur_principal' => 1],
             ['prefixe' => '033', 'libelle' => 'Orange', 'actif' => 1, 'est_operateur_principal' => 0],
             ['prefixe' => '032', 'libelle' => 'Orange', 'actif' => 1, 'est_operateur_principal' => 0],
