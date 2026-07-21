@@ -9,9 +9,9 @@ class ClientModel extends Model
     protected $table         = 'comptes';
     protected $primaryKey    = 'id';
     protected $returnType    = 'array';
-    protected $allowedFields = ['numero_telephone', 'solde'];
+    protected $allowedFields = ['numero_telephone', 'nom', 'prenom', 'solde', 'pourcentage_epargne'];
 
-    protected $useTimestamps = false; // created_at géré par SQLite (DEFAULT CURRENT_TIMESTAMP)
+    protected $useTimestamps = false;
 
     protected $validationRules = [
         'numero_telephone' => 'required|min_length[10]|max_length[15]',
@@ -40,7 +40,7 @@ class ClientModel extends Model
         return $this->find($id);
     }
     public function rechercher(string $terme): array
-{
-    return $this->like('numero_telephone', $terme)->findAll(20);
-}
+    {
+        return $this->like('numero_telephone', $terme)->findAll(20);
+    }
 }

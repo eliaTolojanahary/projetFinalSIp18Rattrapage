@@ -17,6 +17,7 @@ class CompteOperatorModel extends Model
         'nom',
         'prenom',
         'solde',
+        'pourcentage_epargne',
     ];
     
     public function getSituationCompte(): array

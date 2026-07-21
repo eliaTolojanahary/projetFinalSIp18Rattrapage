@@ -9,7 +9,7 @@ class ClientTransactionModel extends Model
     protected $table         = 'transactions';
     protected $primaryKey    = 'id';
     protected $returnType    = 'array';
-    protected $useTimestamps = false; 
+    protected $useTimestamps = false;
 
     protected $allowedFields = [
         'compte_id',
@@ -23,35 +23,37 @@ class ClientTransactionModel extends Model
         'inclure_frais_retrait',
         'prefixe_destination_id',
         'frais_retrait',
-        'promotion'
+        'promotion',
+        'epargnes',
     ];
 
 
     public function historiquePourCompte(int $compteId): array
-{
-    return $this->select('
-            transactions.id,
-            transactions.date_operation,
-            transactions.montant AS montant,
-            transactions.commission AS commission,
-            transactions.inclure_frais_retrait,
-             transactions.promotion as promotion,
-            transactions.frais_retrait as frais_retrait,
-            baremes_frais.frais AS montant_frais,
-            types_operations.code AS type_code,
-            types_operations.libelle AS type_libelle,
-            emetteur.numero_telephone AS compte_emetteur,
-            destinataire.numero_telephone AS compte_destinataire
-        ')
-        ->join('types_operations', 'types_operations.id = transactions.type_operation_id')
-        ->join('baremes_frais', 'baremes_frais.id = transactions.baremes_frais_id')
-        ->join('comptes AS emetteur', 'emetteur.id = transactions.compte_id')
-        ->join('comptes AS destinataire', 'destinataire.id = transactions.compte_destination_id', 'left')
-        ->where('transactions.compte_id', $compteId)
-        ->orWhere('transactions.compte_destination_id', $compteId)
-        ->orderBy('transactions.date_operation', 'DESC')
-        ->findAll();
-}
+    {
+        return $this->select('
+                transactions.id,
+                transactions.date_operation,
+                transactions.montant AS montant,
+                transactions.commission AS commission,
+                transactions.inclure_frais_retrait,
+                transactions.promotion AS promotion,
+                transactions.frais_retrait AS frais_retrait,
+                transactions.epargnes AS epargnes,
+                baremes_frais.frais AS montant_frais,
+                types_operations.code AS type_code,
+                types_operations.libelle AS type_libelle,
+                emetteur.numero_telephone AS compte_emetteur,
+                destinataire.numero_telephone AS compte_destinataire
+            ')
+            ->join('types_operations', 'types_operations.id = transactions.type_operation_id')
+            ->join('baremes_frais', 'baremes_frais.id = transactions.baremes_frais_id')
+            ->join('comptes AS emetteur', 'emetteur.id = transactions.compte_id')
+            ->join('comptes AS destinataire', 'destinataire.id = transactions.compte_destination_id', 'left')
+            ->where('transactions.compte_id', $compteId)
+            ->orWhere('transactions.compte_destination_id', $compteId)
+            ->orderBy('transactions.date_operation', 'DESC')
+            ->findAll();
+    }
 
     public function situationParCompte(int $compteId): array
     {

@@ -17,9 +17,8 @@
                     <tr>
                         <th>Date</th>
                         <th>Type</th>
-                      
                         <th>Compte expediteur</th>
-                          <th>Compte destinataire</th>
+                        <th>Compte destinataire</th>
                         <th>Commission</th>
                         <th>Montant</th>
                         <th>frais </th>
@@ -33,7 +32,7 @@
                         <tr>
                             <td><?= esc(date('d/m/Y H:i', strtotime($t['date_operation']))) ?></td>
                             <td><?= esc($t['type_libelle']) ?></td>
-                             <td>
+                            <td>
                                 <?php if ($t['type_code'] === 'retrait'): ?>
                                     —
                                 <?php else: ?>
@@ -47,7 +46,6 @@
                                     <?= esc($t['compte_destinataire'] ?? $t['compte_emetteur']) ?>
                                 <?php endif; ?>
                             </td>
-                           
                             <td>
                                 <?php if ($t['commission']): ?>
                                     <?= esc($t['commission']) ?>
@@ -55,14 +53,14 @@
                                     0
                                 <?php endif; ?>
                             </td>
-                             <td>
+                            <td>
                                 <?php if ($t['montant']): ?>
                                     <?= esc($t['montant']) ?>
                                 <?php else: ?>
                                     0
                                 <?php endif; ?>
                             </td>
-                             <td>
+                            <td>
                                 <?php if ($t['montant_frais']): ?>
                                     <?= esc($t['montant_frais']) ?>
                                 <?php else: ?>
@@ -76,15 +74,14 @@
                                     0
                                 <?php endif; ?>
                             </td>
-                                                        <td>
+                            <td>
                                 <?php if ($t['promotion']): ?>
                                     <?= esc($t['promotion']) ?>
                                 <?php else: ?>
                                     0
                                 <?php endif; ?>
                             </td>
-                            </td>
-                                                        <td>
+                            <td>
                                 <?php if ($t['epargnes']): ?>
                                     <?= esc($t['epargnes']) ?>
                                 <?php else: ?>
@@ -96,8 +93,6 @@
                 </tbody>
             </table>
         <?php endif; ?>
-
-       
     </div>
 </body>
 </html>
