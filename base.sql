@@ -9,6 +9,8 @@ DROP TABLE IF EXISTS comptes;
 DROP TABLE IF EXISTS types_operations;
 DROP TABLE IF EXISTS prefixes;
 DROP TABLE IF EXISTS promotion;
+DROP TABLE IF EXISTS epargnes;
+
 -- ============================
 -- TABLE : préfixes
 -- ============================
@@ -45,6 +47,14 @@ CREATE TABLE comptes (
     numero_telephone VARCHAR(15) NOT NULL UNIQUE,
     nom VARCHAR(100),
     prenom VARCHAR(100),
+    solde DECIMAL(15,2) NOT NULL DEFAULT 0,
+    pourcentage_epargne DECIMAL(15,2) NOT NULL DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE epargnes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_compte REFERENCES comptes(id) UNIQUE,
     solde DECIMAL(15,2) NOT NULL DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -105,6 +115,7 @@ CREATE TABLE transactions (
     commission DECIMAL(15,2),
     promotion DECIMAL(15,2),
     frais_retrait DECIMAL(15,2),
+    epargnes DECIMAL(15,2),
     FOREIGN KEY(compte_id)
         REFERENCES comptes(id),
 
@@ -169,13 +180,22 @@ INSERT INTO commission(id_prefixe,pourcentage) VALUES
 (6,15);   -- Airtel
 
 -- Comptes
-INSERT INTO comptes(numero_telephone,nom,prenom,solde) VALUES
-('034123456','Rakoto','Jean',150000),
-('038654321','Rasoa','Marie',120000),
-('033111222','Andry','Paul',80000),
-('032333444','Rabe','Daniel',60000),
-('037555666','Hery','Claire',90000),
-('031777888','Soa','Luc',40000);
+INSERT INTO comptes(numero_telephone,nom,prenom,solde, pourcentage_epargne) VALUES
+('034123456','Rakoto','Jean',150000, 20),
+('038654321','Rasoa','Marie',120000, 0),
+('033111222','Andry','Paul',80000, 10),
+('032333444','Rabe','Daniel',60000, 0),
+('037555666','Hery','Claire',90000, 0),
+('031777888','Soa','Luc',40000, 0);
+
+-- Comptes
+INSERT INTO epargnes(id_compte) VALUES
+(1),
+(2),
+(3),
+(4),
+(5),
+(6);
 
 -- Quelques transactions
 INSERT INTO transactions(

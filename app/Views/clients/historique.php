@@ -25,7 +25,7 @@
                         <th>frais </th>
                         <th>frais retrait</th>
                         <th>promotion</th>
-                        
+                        <th>epargnes</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -79,6 +79,14 @@
                                                         <td>
                                 <?php if ($t['promotion']): ?>
                                     <?= esc($t['promotion']) ?>
+                                <?php else: ?>
+                                    0
+                                <?php endif; ?>
+                            </td>
+                            </td>
+                                                        <td>
+                                <?php if ($t['epargnes']): ?>
+                                    <?= esc($t['epargnes']) ?>
                                 <?php else: ?>
                                     0
                                 <?php endif; ?>

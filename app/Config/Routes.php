@@ -17,6 +17,8 @@ $routes->get('transfert', 'ClientOperation::transfertForm');
 $routes->post('transfert', 'ClientOperation::transfertStore');
 $routes->get('historique', 'ClientOperation::historique');
 $routes->get('detail', 'ClientOperation::detail');
+$routes->get('epargne', 'ClientOperation::epargneForm');
+$routes->post('epargne', 'ClientOperation::updateEpargne');
 
 $routes->get('operator/login', 'OperatorLogin::form');
 $routes->post('operator/login', 'OperatorLogin::login');

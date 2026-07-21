@@ -13,6 +13,41 @@ use App\Models\ClientPromotion;
 
 class ClientOperation extends BaseController
 {
+    public function updateEpargne(){
+        $compteId = session()->get('compte_id');
+        $compteModel = new ClientModel();
+        $pourcentage_epargne =  (float) $this->request->getPost('pourcentage');
+        // dd((float) $this->request->getPost('pourcentage'));
+        if ($pourcentage_epargne < 0) {
+            return redirect()->back()->withInput()->with(
+                'error',
+                'Pourcentage negatif : ' . number_format($pourcentage_epargne, 0, ',', ' ') .
+                'Veuiller mettre un nombre positif entre 0 et 100' 
+            );
+        }
+        if ($pourcentage_epargne > 100) {
+            return redirect()->back()->withInput()->with(
+                'error',
+                'La partie epargne ne doit pas etre supperieur a 100 : ' . number_format($pourcentage_epargne, 0, ',', ' ') .
+                'Veuiller mettre un nombre positif entre 0 et 100' 
+            );
+        }
+        // dd($pourcentage_epargne);
+        $compte = $compteModel->update($compteId, ['pourcentage_epargne' => $pourcentage_epargne ]);
+        
+        return redirect()->to('/epargne')->with(
+            'success',
+            'Mis a jour pourcentage epargne de ' . number_format($pourcentage_epargne, 0, ',', ' ') . ' % ' 
+        );
+    }
+    public function epargneForm(){
+        $compteId = session()->get('compte_id');
+        $compteModel = new ClientModel();
+        $compte = $compteModel->find($compteId);
+        return view('clients/epargne', [
+            'compte'        => $compte,
+        ]);
+    }
     public function depotForm()
     {
         $compteId = session()->get('compte_id');
@@ -332,6 +367,7 @@ public function transfertStore()
     $soldeCourant = $compteOrigine['solde'];
     $fraisRetraitTotal = 0;
     $commissionTotal   = 0;
+    $epargne = 0;
 
     foreach ($operations as $op) {
         $compteDestinataire = $compteModel->trouverOuCreerCompte($op['numero']);
@@ -341,7 +377,8 @@ public function transfertStore()
 
         $nouveauSoldeDestinataire = $compteDestinataire['solde'] + $op['montant_recu'];
         $compteModel->update($compteDestinataire['id'], ['solde' => $nouveauSoldeDestinataire]);
-
+        $epargne = soldeCourant  * (1 - ( $compteDestinataire['pourcentage_epargne'] / 100));
+          
         $transactionModel->insert([
             'compte_id'              => $compteOrigine['id'],
             'type_operation_id'      => $typeTransfertId,
@@ -355,6 +392,7 @@ public function transfertStore()
             'date_operation'         => $dateTransfert,
             'frais_retrait'         => $fraisRetrait,
             'promotion'                => $promotion,
+            'epargnes'  => $epargne,
         ]);
 
         if ($op['inclure_frais_retrait']) {
