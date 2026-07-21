@@ -8,7 +8,8 @@
 </head>
 <body>
     <div class="login-card">
-        <h1>Mobile Money</h1>
+        <h1>Mobile Money </h1>
+        <p>( veuillez utiliser le numero pour tester : 034123456 )</p>
         <p class="subtitle">Entrez votre numéro pour continuer</p>
 
         <?php if (session('error')): ?>

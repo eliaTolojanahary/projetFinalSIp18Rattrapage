@@ -21,7 +21,8 @@ class ClientTransactionModel extends Model
         'date_operation',
         'commission',
         'inclure_frais_retrait',
-        'prefixe_destination_id'
+        'prefixe_destination_id',
+        'frais_retrait'
     ];
 
 
@@ -33,6 +34,7 @@ class ClientTransactionModel extends Model
             transactions.montant AS montant,
             transactions.commission AS commission,
             transactions.inclure_frais_retrait,
+            transactions.frais_retrait as frais_retrait,
             baremes_frais.frais AS montant_frais,
             types_operations.code AS type_code,
             types_operations.libelle AS type_libelle,
