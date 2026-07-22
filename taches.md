@@ -13,6 +13,11 @@ php spark serve
 
 http://localhost:8080/
 
+## Accès côté operateur
+
+http://localhost:8080/operator
+
+
 ## Version 1
 
 - **Côté client** : Elia (etu003230)
@@ -252,3 +257,65 @@ Client miteny epargne %
 ex : epargne 50% :  50 pourcent vers solde principal / 50 pourcent vers solde epargne 
 1 client - 1 epargne 
 Sur les transfert uniquement    
+
+## fix épargne
+- **Côté client**: Jemima (etu003370) 
+
+    - `Page 7 : Épargne` — route `GET/POST /epargne` => `ClientOperation::epargneForm`, `ClientOperation::updateEpargne`
+        * Formulaire :
+            - Pourcentage épargne (0 à 100 %)
+            - Valeur pré-remplie avec le pourcentage actuel du compte
+        * Affichage :
+            - Compte (numéro de téléphone)
+            - Solde principal actuel
+            - Solde épargne actuel
+            - Pourcentage épargne actuel
+        * Règle métier :
+            - 1 client = 1 compte épargne (table `epargnes`, contrainte UNIQUE sur `id_compte`)
+            - Le pourcentage est stocké dans `comptes.pourcentage_epargne`
+            - Validation : nombre entre 0 et 100
+        * Modèle : `ClientModel` (`comptes.pourcentage_epargne`)
+
+    - `Page 4 : Transfert` — `ClientOperation::transfertStore`
+        * Logique épargne lors du transfert :
+            - Appliqué uniquement aux opérations de transfert
+            - `(100 - pourcentage)%` du montant reçu crédité sur le **compte principal** du destinataire
+            - `pourcentage%` du montant reçu crédité sur le **compte épargne** du destinataire
+        * Exemple : transfert 100 000 Ar, épargne 20% → 80 000 Ar sur principal / 20 000 Ar sur épargne
+        * Montant épargné enregistré dans `transactions.epargnes`
+        * Le compte émetteur est débité du montant total (montant + frais + commission) comme avant
+
+    - `Page 5 : Détail client` — route `GET /detail` => `ClientOperation::detail`
+        * Affichage ajouté :
+            - Solde épargne actuel
+            - Pourcentage épargne
+        * Section "Compte Épargne" dans la fiche client
+        * Section "Montant dans le compte épargne" dans le bloc "Voir le solde"
+        * Données passées depuis `ClientEpargneModel::creerSiInexistant()`
+
+    - `Page 6 : Historique des transactions` — `historiquePourCompte()`
+        * Affichage de la colonne épargne conditionné :
+            - Si l'utilisateur connecté est le destinataire de la transaction → affiche `transactions.epargnes`
+            - Si l'utilisateur connecté est l'émetteur → affiche `0`
+        * Condition : `$t['compte_destinataire'] === $compte['numero_telephone']`
+        * Le numéro du compte connecté est passé à la vue depuis le contrôleur
+
+    - `Modèle` — `ClientEpargneModel` (nouveau, table `epargnes`)
+        * `parCompte(int $compteId)` → retourne la ligne épargne d'un compte
+        * `creerSiInexistant(int $compteId)` → crée la ligne épargne si elle n'existe pas
+        * `crediter(int $compteId, float $montant)` → crédite le solde épargne
+
+    - `Modèle` — `ClientModel::trouverOuCreerCompte()`
+        * Modification : lors de la création d'un nouveau compte, crée automatiquement la ligne correspondante dans `epargnes` via `ClientEpargneModel::creerSiInexistant()`
+
+    - `Base de données` :
+        * Table `epargnes` (déjà existante) :
+            - `id` INT PK AUTO
+            - `id_compte` INT UNIQUE FK → comptes(id)
+            - `solde` DECIMAL(15,2) DEFAULT 0
+            - `created_at` DATETIME
+        * Table `comptes` :
+            - `pourcentage_epargne` DECIMAL(15,2) DEFAULT 0 (ajouté par migration)
+        * Table `transactions` :
+            - `epargnes` DECIMAL(15,2) NULL (ajouté par migration)
+        * Aucune migration supplémentaire nécessaire

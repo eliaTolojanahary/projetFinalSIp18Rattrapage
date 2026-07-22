@@ -20,6 +20,11 @@ $routes->get('detail', 'ClientOperation::detail');
 $routes->get('epargne', 'ClientOperation::epargneForm');
 $routes->post('epargne', 'ClientOperation::updateEpargne');
 
+$routes->get('/operator', function () {
+    // dd('On passe ici');
+    return redirect()->to('/operator/login');
+});
+
 $routes->get('operator/login', 'OperatorLogin::form');
 $routes->post('operator/login', 'OperatorLogin::login');
 $routes->get('operator/logout', 'OperatorLogin::logout');
