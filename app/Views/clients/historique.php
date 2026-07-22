@@ -83,7 +83,7 @@
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <?php if ($t['epargnes']): ?>
+                                <?php if ($t['compte_destinataire'] && $t['compte_destinataire'] === $compte['numero_telephone']): ?>
                                     <?= esc($t['epargnes']) ?>
                                 <?php else: ?>
                                     0

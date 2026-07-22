@@ -454,9 +454,10 @@ public function transfertStore()
     }
 
     $transactionModel = new ClientTransactionModel();
+    $compteModel = new ClientModel();
     $historique = $transactionModel->historiquePourCompte($compteId);
-
-    return view('clients/historique', ['historique' => $historique]);
+    $compte = $compteModel->find($compteId) ;
+    return view('clients/historique', ['historique' => $historique, 'compte' => $compte ]);
 }
 
     public function detail()
